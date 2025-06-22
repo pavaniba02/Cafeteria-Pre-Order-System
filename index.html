@@ -827,6 +827,139 @@
         body.dark-mode .profile-edit-btn, body.dark-mode .profile-save-btn { background: #f7b731; color: #23272b; }
         body.dark-mode .profile-cancel-btn { background: #23272b; color: #f7b731; border: 1px solid #f7b731; }
         body.dark-mode .profile-logout-btn { background: #23272b; color: #f7b731; border: 1px solid #f7b731; }
+        body.dark-mode .menu-card {
+            background: #23272b;
+            color: #f1f1f1;
+            border: 1px solid #333;
+        }
+        body.dark-mode .menu-card .card-title {
+            color: #f7b731;
+        }
+        body.dark-mode .menu-card .card-description {
+            color: #b0b3b8;
+        }
+        body.dark-mode .menu-card .card-time {
+            background: #23272b;
+            color: #f7b731;
+            border: 1px solid #444;
+        }
+        body.dark-mode .card-icon {
+            color: #f7b731;
+        }
+
+        /* Profile Dropdown Responsive & Professional Styles */
+        .profile-dropdown {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px #0002;
+            padding: 2rem 1.5rem;
+            min-width: 340px;
+            max-width: 95vw;
+            margin-top: 1.2rem;
+            transition: box-shadow 0.3s, border-radius 0.3s;
+        }
+        .profile-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 1.2rem;
+            letter-spacing: 1px;
+        }
+        .profile-detail-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.7rem;
+            font-size: 1.08rem;
+        }
+        .profile-label {
+            font-weight: 600;
+            color: #555;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .profile-value {
+            color: #222;
+            font-weight: 500;
+            word-break: break-all;
+        }
+        .profile-edit-btn, .profile-logout-btn {
+            width: 100%;
+            padding: 0.7rem 0;
+            border-radius: 8px;
+            font-size: 1.08rem;
+            font-weight: 600;
+            margin-top: 0.7rem;
+            background: var(--secondary-color);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .profile-edit-btn:hover, .profile-logout-btn:hover {
+            background: var(--accent-color);
+        }
+        .profile-more-section {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .profile-more-item {
+            padding: 0.5rem 0.7rem;
+            border-radius: 6px;
+            cursor: pointer;
+            color: #1976d2;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+        .profile-more-item:hover {
+            background: #f7b73122;
+        }
+        .profile-avatar-row img {
+            border: 3px solid #f7b731;
+            box-shadow: 0 2px 12px #f7b73133;
+        }
+        /* Mobile Fullscreen Profile */
+        @media (max-width: 600px) {
+            .profile-dropdown {
+                position: fixed !important;
+                top: 0 !important;
+                left: 0 !important;
+                width: 100vw !important;
+                height: 100vh !important;
+                min-width: unset !important;
+                max-width: unset !important;
+                border-radius: 0 !important;
+                margin: 0 !important;
+                z-index: 2000 !important;
+                box-shadow: 0 0 0 #0000 !important;
+                padding: 2.5rem 1.2rem 1.2rem 1.2rem !important;
+                overflow-y: auto !important;
+                background: #fff !important;
+                display: flex !important;
+                flex-direction: column !important;
+                justify-content: flex-start !important;
+                align-items: stretch !important;
+            }
+            .profile-title {
+                font-size: 2rem;
+                margin-bottom: 2rem;
+            }
+            .profile-avatar-row img {
+                width: 110px !important;
+                height: 110px !important;
+            }
+            .profile-detail-row {
+                font-size: 1.18rem;
+                margin-bottom: 1.1rem;
+            }
+            .profile-edit-btn, .profile-logout-btn {
+                font-size: 1.18rem;
+                padding: 1rem 0;
+            }
+        }
     </style>
 </head>
 <body>
@@ -852,12 +985,17 @@
                                 <img id="profileAvatarImgView" src="https://ui-avatars.com/api/?name=User&size=100" alt="Profile" style="width:70px;height:70px;border-radius:50%;object-fit:cover;box-shadow:0 4px 16px #1976d233;" />
                             </div>
                             <div class="profile-detail-row"><span class="profile-label"><i class="fas fa-user"></i> Name:</span><span class="profile-value" id="profileName"></span></div>
-                            <div class="profile-detail-row"><span class="profile-label"><i class="fas fa-envelope"></i> Email/Admin ID:</span><span class="profile-value" id="profileEmail"></span></div>
+                            <div class="profile-detail-row"><span class="profile-label"><i class="fas fa-envelope"></i> Email:</span><span class="profile-value" id="profileEmail"></span></div>
                             <div class="profile-detail-row"><span class="profile-label"><i class="fas fa-phone"></i> Phone:</span><span class="profile-value" id="profilePhone"></span></div>
                             <div class="profile-detail-row"><span class="profile-label"><i class="fas fa-venus-mars"></i> Gender:</span><span class="profile-value" id="profileGender"></span></div>
                             <div class="profile-detail-row"><span class="profile-label"><i class="fas fa-birthday-cake"></i> Birthday:</span><span class="profile-value" id="profileBirthday"></span></div>
                             <div class="profile-detail-row"><span class="profile-label"><i class="fas fa-map-marker-alt"></i> Address:</span><span class="profile-value" id="profileAddress"></span></div>
                             <div class="profile-detail-row"><span class="profile-label"><i class="fas fa-user-tag"></i> Role:</span><span class="profile-value" id="profileRole"></span></div>
+                            <div class="profile-detail-row" id="profileCoinsRow">
+                            <span class="profile-label"><i class="fas fa-coins"></i> Coins:</span>
+                            <span class="profile-value" id="profileCoins">0</span>
+                            <button class="profile-add-coins-btn" id="addCoinsBtn" style="margin-left:10px;padding:3px 10px;font-size:0.95rem;background:#f7b731;color:#23272b;border:none;border-radius:5px;cursor:pointer;">Add Coins</button>
+                        </div>
                             <button class="profile-edit-btn" id="profileEditBtn">Edit Profile</button>
                             <hr style="margin:1rem 0;">
                             <div class="profile-more-section">
@@ -875,7 +1013,7 @@
                                 <input type="file" id="profilePicInput" accept="image/*" style="display:none;">
                             </div>
                             <div class="profile-detail-row"><span class="profile-label"><i class="fas fa-user"></i> Name:</span><input type="text" id="editName" class="profile-edit-input" required></div>
-                            <div class="profile-detail-row"><span class="profile-label"><i class="fas fa-envelope"></i> Email/Admin ID:</span><input type="email" id="editEmail" class="profile-edit-input" required></div>
+                            <div class="profile-detail-row"><span class="profile-label"><i class="fas fa-envelope"></i> Email:</span><input type="email" id="editEmail" class="profile-edit-input" required></div>
                             <div class="profile-detail-row"><span class="profile-label"><i class="fas fa-phone"></i> Phone:</span><input type="tel" id="editPhone" class="profile-edit-input" pattern="[0-9]{10}" required></div>
                             <div class="profile-detail-row"><span class="profile-label"><i class="fas fa-venus-mars"></i> Gender:</span><select id="editGender" class="profile-edit-input"><option value="">Select</option><option value="male">Male</option><option value="female">Female</option><option value="other">Other</option></select></div>
                             <div class="profile-detail-row"><span class="profile-label"><i class="fas fa-birthday-cake"></i> Birthday:</span><input type="date" id="editBirthday" class="profile-edit-input"></div>
@@ -1046,6 +1184,30 @@
       </div>
     </div>
     
+    <!-- Add Coins Modal -->
+    <div id="addCoinsModal" class="modal" style="display:none;position:fixed;z-index:9999;left:0;top:0;width:100vw;height:100vh;background:rgba(0,0,0,0.4);align-items:center;justify-content:center;">
+      <div class="modal-content" style="background:#fff;padding:2rem 1.5rem;border-radius:12px;max-width:350px;width:90%;box-shadow:0 8px 32px #0005;position:relative;">
+        <span class="close" id="closeAddCoinsModal" style="position:absolute;top:10px;right:18px;font-size:1.5rem;cursor:pointer;">&times;</span>
+        <h3 style="margin-bottom:1rem;color:#f7b731;text-align:center;">Add Coins</h3>
+        <div id="addCoinsStep1">
+          <label for="addCoinsPhone">Enter Mobile Number</label>
+          <input type="tel" id="addCoinsPhone" maxlength="10" pattern="[0-9]{10}" style="width:100%;margin-bottom:0.7rem;padding:0.5rem;border-radius:6px;border:1px solid #ccc;">
+          <button id="sendOtpBtn" style="width:100%;background:#f7b731;color:#23272b;padding:0.6rem 0;border:none;border-radius:6px;font-weight:600;">Send OTP</button>
+        </div>
+        <div id="addCoinsStep2" style="display:none;">
+          <label for="addCoinsOtp">Enter OTP</label>
+          <input type="text" id="addCoinsOtp" maxlength="6" pattern="[0-9]{6}" style="width:100%;margin-bottom:0.7rem;padding:0.5rem;border-radius:6px;border:1px solid #ccc;">
+          <button id="verifyOtpBtn" style="width:100%;background:#f7b731;color:#23272b;padding:0.6rem 0;border:none;border-radius:6px;font-weight:600;">Verify OTP</button>
+        </div>
+        <div id="addCoinsStep3" style="display:none;">
+          <label for="addCoinsAmount">Enter Amount to Add</label>
+          <input type="number" id="addCoinsAmount" min="1" style="width:100%;margin-bottom:0.7rem;padding:0.5rem;border-radius:6px;border:1px solid #ccc;">
+          <button id="addCoinsFinalBtn" style="width:100%;background:#f7b731;color:#23272b;padding:0.6rem 0;border:none;border-radius:6px;font-weight:600;">Add Coins</button>
+        </div>
+        <div id="addCoinsMessage" style="margin-top:1rem;text-align:center;color:#e74c3c;font-weight:500;"></div>
+      </div>
+    </div>
+
     <main>
         <div class="welcome-section">
             <h2>Welcome to Our Cafeteria</h2>
@@ -1081,12 +1243,14 @@
 
             <a href="SnacksNew1.html" class="menu-card snacks-card">
                 <div class="card-image">
-                    <i class="fas fa-cookie-bite card-icon"></i>
+                    <i class="fas fa-hamburger card-icon"></i>
                 </div>
                 <div class="card-content">
                     <h3 class="card-title">Snacks</h3>
-                    <p class="card-description">Quick bites and refreshments perfect for study breaks. Samosas, sandwiches, beverages, and sweet treats to keep you going throughout the day.</p>
-                    <span class="card-time">Available: 3:00 PM - 6:00 PM</span>
+                    <p class="card-description">Quick bites, street food, and sweet treats for every craving.<br>
+                    Enjoy samosas, burgers, momos, and more, freshly made and always tasty.<br>
+                    Perfect for a quick break or sharing with friends at any time of day.</p>
+                    <span class="card-time">Available: All Day</span>
                 </div>
             </a>
         </div>
@@ -1120,6 +1284,7 @@
         const aboutCloseBtn = aboutModal.querySelector('.close');
         const closeAboutCafeBtn = document.getElementById('closeAboutCafeBtn');
         const closeFeedbackModal = document.getElementById('closeFeedbackModal');
+        const closeAddCoinsModal = document.getElementById('closeAddCoinsModal');
 
         // Modal functions
         function openStudentModal() {
@@ -1157,6 +1322,9 @@
             }, 3000);
         }
 
+        function capitalizeWords(str) {
+            return str.replace(/\b\w/g, c => c.toUpperCase());
+        }
         function showMenuItems(name) {
             document.querySelector('.welcome-description').style.display = 'none';
             document.querySelector('.login-buttons').style.display = 'none';
@@ -1173,15 +1341,13 @@
             document.getElementById('headerProfile').style.display = 'flex';
             // Fill profile details
             let user = JSON.parse(localStorage.getItem('studentData')) || JSON.parse(localStorage.getItem('adminData'));
-            document.getElementById('profileName').textContent = user.name || '-';
+            document.getElementById('profileName').textContent = capitalizeWords(user.name || '-');
             document.getElementById('profilePhone').textContent = user.phone || '-';
-            if(user.email) document.getElementById('profileEmail').textContent = user.email;
-            else if(user.adminId) document.getElementById('profileEmail').textContent = user.adminId;
-            else document.getElementById('profileEmail').textContent = '-';
+            document.getElementById('profileEmail').textContent = user.email ? user.email : '-';
             document.getElementById('profileBirthday').textContent = user.birthday || '-';
             document.getElementById('profileRole').textContent = user.type === 'admin' ? 'Admin' : 'Student';
-            document.getElementById('profileAddress').textContent = user.address || '-';
-            document.getElementById('profileGender').textContent = user.gender || '-';
+            document.getElementById('profileAddress').textContent = capitalizeWords(user.address || '-');
+            document.getElementById('profileGender').textContent = capitalizeWords(user.gender || '-');
             // Set profile image
             const img = document.getElementById('profileAvatarImg');
             if(user.profilePic) {
@@ -1206,6 +1372,7 @@
         aboutCloseBtn.onclick = () => aboutModal.style.display = 'none';
         closeAboutCafeBtn.onclick = () => closeAboutCafeModal();
         closeFeedbackModal.onclick = () => document.getElementById('feedbackModal').style.display = 'none';
+        closeAddCoinsModal.onclick = () => document.getElementById('addCoinsModal').style.display = 'none';
 
         // Close modals when clicking outside
         window.onclick = function(event) {
@@ -1222,6 +1389,10 @@
             const feedbackModal = document.getElementById('feedbackModal');
             if (event.target == feedbackModal) {
                 feedbackModal.style.display = 'none';
+            }
+            const addCoinsModal = document.getElementById('addCoinsModal');
+            if (event.target == addCoinsModal) {
+                addCoinsModal.style.display = 'none';
             }
             if (event.target == aboutCafeModal) {
                 aboutCafeModal.style.display = 'none';
@@ -1453,6 +1624,104 @@
           showNotification('Thank you for your feedback!');
           document.getElementById('feedbackForm').reset();
         };
+
+        // --- Add Coins Modal Logic ---
+        let coins = parseInt(localStorage.getItem('profileCoins') || '0');
+        const profileCoins = document.getElementById('profileCoins');
+        function updateCoinsDisplay() {
+            profileCoins.textContent = coins;
+        }
+        updateCoinsDisplay();
+
+        const addCoinsBtn = document.getElementById('addCoinsBtn');
+        const addCoinsModal = document.getElementById('addCoinsModal');
+        const closeAddCoinsModalBtn = document.getElementById('closeAddCoinsModal');
+        const addCoinsStep1 = document.getElementById('addCoinsStep1');
+        const addCoinsStep2 = document.getElementById('addCoinsStep2');
+        const addCoinsStep3 = document.getElementById('addCoinsStep3');
+        const sendOtpBtn = document.getElementById('sendOtpBtn');
+        const verifyOtpBtn = document.getElementById('verifyOtpBtn');
+        const addCoinsFinalBtn = document.getElementById('addCoinsFinalBtn');
+        const addCoinsMessage = document.getElementById('addCoinsMessage');
+        let generatedOtp = '';
+        let verifiedMobile = '';
+
+        addCoinsBtn.onclick = function() {
+            addCoinsModal.style.display = 'flex';
+            addCoinsStep1.style.display = '';
+            addCoinsStep2.style.display = 'none';
+            addCoinsStep3.style.display = 'none';
+            addCoinsMessage.textContent = '';
+            document.getElementById('addCoinsPhone').value = '';
+            document.getElementById('addCoinsOtp').value = '';
+            document.getElementById('addCoinsAmount').value = '';
+        };
+        closeAddCoinsModalBtn.onclick = function() {
+            addCoinsModal.style.display = 'none';
+        };
+        sendOtpBtn.onclick = function() {
+            const phone = document.getElementById('addCoinsPhone').value.trim();
+            if (!/^\d{10}$/.test(phone)) {
+                addCoinsMessage.textContent = 'Please enter a valid 10-digit mobile number.';
+                return;
+            }
+            generatedOtp = (Math.floor(100000 + Math.random() * 900000)).toString();
+            // Show OTP above the OTP input for 2 minutes
+            const otpDisplay = document.createElement('div');
+            otpDisplay.id = 'otpDisplay';
+            otpDisplay.style = 'margin-bottom:10px;color:#2980b9;font-weight:600;font-size:1.1rem;text-align:center;';
+            otpDisplay.textContent = 'Your OTP: ' + generatedOtp + ' (valid for 2 minutes)';
+            addCoinsStep2.insertBefore(otpDisplay, addCoinsStep2.firstChild);
+            addCoinsMessage.textContent = 'OTP sent to ' + phone + '. Please enter the OTP below.';
+            setTimeout(() => {
+                addCoinsStep1.style.display = 'none';
+                addCoinsStep2.style.display = '';
+                addCoinsMessage.textContent = '';
+                // Remove OTP after 2 minutes
+                setTimeout(() => {
+                    if (document.getElementById('otpDisplay')) {
+                        document.getElementById('otpDisplay').textContent = 'OTP expired. Please request a new OTP.';
+                    }
+                }, 120000);
+            }, 1500);
+        };
+        verifyOtpBtn.onclick = function() {
+            const otp = document.getElementById('addCoinsOtp').value.trim();
+            if (otp === generatedOtp) {
+                addCoinsStep2.style.display = 'none';
+                addCoinsStep3.style.display = '';
+                verifiedMobile = document.getElementById('addCoinsPhone').value.trim();
+                addCoinsMessage.textContent = 'Verified successfully! Please enter the amount to add.';
+                setTimeout(() => { addCoinsMessage.textContent = ''; }, 1500);
+            } else {
+                addCoinsMessage.textContent = 'Invalid OTP. Please try again.';
+            }
+        };
+        addCoinsFinalBtn.onclick = function() {
+            const amount = parseInt(document.getElementById('addCoinsAmount').value);
+            if (isNaN(amount) || amount < 1) {
+                addCoinsMessage.textContent = 'Please enter a valid amount.';
+                return;
+            }
+            if (coins + amount > 5000) {
+                addCoinsMessage.textContent = 'Coin limit reached. You cannot have more than 5000 coins.';
+                return;
+            }
+            coins += amount;
+            localStorage.setItem('profileCoins', coins);
+            updateCoinsDisplay();
+            addCoinsStep3.style.display = 'none';
+            addCoinsMessage.textContent = 'Coins added successfully!';
+            setTimeout(() => {
+                addCoinsModal.style.display = 'none';
+                addCoinsMessage.textContent = '';
+            }, 1800);
+        };
+        // Close modal on outside click
+        window.addEventListener('click', function(e) {
+            if (e.target === addCoinsModal) addCoinsModal.style.display = 'none';
+        });
+        // --- End Add Coins Modal Logic ---
     </script>
 </body>
 </html>
