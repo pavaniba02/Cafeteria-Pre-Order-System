@@ -906,67 +906,205 @@ https://youtube.com/@amityuniversity3146?feature=shared"><i class="fab fa-youtub
             © 2025 AMITY CAFETERIA • ALL RIGHTS RESERVED
         </p>
     </footer>
-
     <script>
+        // Initialize cart variables
         let cart = [];
         let totalAmount = 0;
         let paymentProcessed = false;
 
-        function addToCart(item, price) {
-            if (paymentProcessed) {
-                resetOrder();
+        // Initialize when document loads
+        document.addEventListener('DOMContentLoaded', function() {
+            try {
+                // Initialize empty cart
+                cart = [];
+                totalAmount = 0;
+                paymentProcessed = false;
+                
+                // Update UI
+                updateCart();
+                
+                // Log successful initialization
+                console.log('Cart initialized successfully');
+            } catch (error) {
+                console.error('Error initializing cart:', error);
+                showPaymentStatus('There was an error initializing the cart. Please refresh the page.', 'error');
             }
-            cart.push({ item, price });
-            totalAmount += price;
-            updateCart();
-            showAddToCartAnimation();
+        });
+
+        function addToCart(item, price) {
+            try {
+                // Validate inputs
+                if (!item || typeof price !== 'number' || price < 0) {
+                    throw new Error('Invalid item or price');
+                }
+
+                // Reset if previous order was completed
+                if (paymentProcessed) {
+                    resetOrder();
+                }
+                
+                // Add the item to cart
+                cart.push({ item, price });
+                totalAmount += price;
+                
+                // Update the cart display
+                updateCart();
+                
+                // Show success animation with item name
+                const itemAdded = document.getElementById('itemAdded');
+                if (itemAdded) {
+                    itemAdded.textContent = `${item} added to cart!`;
+                    showAddToCartAnimation();
+                }
+                
+                // Log for debugging
+                console.log('Added to cart:', { item, price, newTotal: totalAmount, cartSize: cart.length });
+            } catch (error) {
+                console.error('Error adding to cart:', error);
+                alert('There was an error adding the item to cart. Please try again.');
+            }
         }
+
         function showAddToCartAnimation() {
-            const itemAdded = document.getElementById('itemAdded');
-            itemAdded.style.display = 'block';
-            itemAdded.style.animation = 'none';
-            void itemAdded.offsetWidth;
-            itemAdded.style.animation = 'fadeInOut 2s ease-in-out';
-            setTimeout(() => {
-                itemAdded.style.display = 'none';
-            }, 2000);
+            try {
+                const itemAdded = document.getElementById('itemAdded');
+                if (!itemAdded) {
+                    console.error('Animation element not found');
+                    return;
+                }
+
+                itemAdded.style.display = 'block';
+                itemAdded.style.animation = 'none';
+                void itemAdded.offsetWidth; // Trigger reflow
+                itemAdded.style.animation = 'fadeInOut 2s ease-in-out';
+                
+                setTimeout(() => {
+                    itemAdded.style.display = 'none';
+                }, 2000);
+            } catch (error) {
+                console.error('Error showing animation:', error);
+            }
         }
 
         function updateCart() {
-            const cartDiv = document.getElementById('cartItems');
-            cartDiv.innerHTML = '';
-            if (cart.length === 0) {
-                cartDiv.innerHTML = '<p style="text-align: center; color: #666;">Your cart is empty</p>';
-                document.getElementById('total').textContent = 'Total: Rs 0';
-                return;
+            try {
+                // Get cart and total elements
+                const cartDiv = document.getElementById('cartItems');
+                const totalDiv = document.getElementById('total');
+                
+                if (!cartDiv || !totalDiv) {
+                    throw new Error('Required cart elements not found');
+                }
+                
+                // Clear current cart display
+                cartDiv.innerHTML = '';
+                
+                // Show empty cart message if no items
+                if (!Array.isArray(cart) || cart.length === 0) {
+                    cartDiv.innerHTML = '<p style="text-align: center; color: #666;">Your cart is empty</p>';
+                    totalDiv.textContent = 'Total: Rs 0';
+                    return;
+                }
+                
+                // Add each item to cart display
+                cart.forEach(({ item, price }, index) => {
+                    try {
+                        // Validate item data
+                        if (!item || typeof price !== 'number') {
+                            console.error('Invalid item data:', { item, price });
+                            return;
+                        }
+                        
+                        // Create item container
+                        const itemDiv = document.createElement('div');
+                        itemDiv.className = 'cart-item';
+                        
+                        // Add item name
+                        const nameSpan = document.createElement('span');
+                        nameSpan.className = 'cart-item-name';
+                        nameSpan.textContent = item;
+                        
+                        // Add price
+                        const priceSpan = document.createElement('span');
+                        priceSpan.className = 'cart-item-price';
+                        priceSpan.textContent = `Rs ${price}`;
+                        
+                        // Add remove button
+                        const removeBtn = document.createElement('button');
+                        removeBtn.className = 'remove-btn';
+                        removeBtn.innerHTML = '&times;';
+                        removeBtn.onclick = (e) => {
+                            e.stopPropagation();
+                            removeFromCart(index);
+                        };
+                        
+                        // Assemble item div
+                        itemDiv.appendChild(nameSpan);
+                        itemDiv.appendChild(priceSpan);
+                        itemDiv.appendChild(removeBtn);
+                        cartDiv.appendChild(itemDiv);
+                    } catch (itemError) {
+                        console.error('Error creating cart item:', itemError);
+                    }
+                });
+                
+                // Calculate and validate total
+                const calculatedTotal = cart.reduce((sum, { price }) => sum + (typeof price === 'number' ? price : 0), 0);
+                if (Math.abs(calculatedTotal - totalAmount) > 0.01) {
+                    console.warn('Total amount mismatch, fixing...');
+                    totalAmount = calculatedTotal;
+                }
+                
+                // Update total amount display
+                totalDiv.textContent = `Total: Rs ${totalAmount}`;
+                
+                // Log for debugging
+                console.log('Cart updated:', { items: cart.length, total: totalAmount });
+                
+                // Update payment button visibility
+                const payNowBtn = document.getElementById('payNowBtn');
+                if (payNowBtn) {
+                    payNowBtn.style.display = cart.length > 0 ? 'block' : 'none';
+                }
+            } catch (error) {
+                console.error('Error updating cart:', error);
+                alert('There was an error updating the cart. Please try refreshing the page.');
             }
-            cart.forEach(({ item, price }, index) => {
-                const itemDiv = document.createElement('div');
-                itemDiv.className = 'cart-item';
-                const nameSpan = document.createElement('span');
-                nameSpan.className = 'cart-item-name';
-                nameSpan.textContent = item;
-                const priceSpan = document.createElement('span');
-                priceSpan.className = 'cart-item-price';
-                priceSpan.textContent = `Rs ${price}`;
-                const removeBtn = document.createElement('button');
-                removeBtn.className = 'remove-btn';
-                removeBtn.innerHTML = '&times;';
-                removeBtn.onclick = () => removeFromCart(index);
-                itemDiv.appendChild(nameSpan);
-                itemDiv.appendChild(priceSpan);
-                itemDiv.appendChild(removeBtn);
-                cartDiv.appendChild(itemDiv);
-            });
-            document.getElementById('total').textContent = `Total: Rs ${totalAmount}`;
         }
 
         function removeFromCart(index) {
-            const item = cart[index];
-            totalAmount -= item.price;
-            cart.splice(index, 1);
-            updateCart();
-        }        function showPayment() {
+            try {
+                // Validate index
+                if (!Number.isInteger(index) || index < 0 || index >= cart.length) {
+                    throw new Error('Invalid cart item index');
+                }
+                
+                // Get item before removal
+                const item = cart[index];
+                
+                // Validate item and price
+                if (!item || typeof item.price !== 'number') {
+                    throw new Error('Invalid item data');
+                }
+                
+                // Update total
+                totalAmount = Math.max(0, totalAmount - item.price);
+                
+                // Remove item
+                cart.splice(index, 1);
+                
+                // Update display
+                updateCart();
+                
+                // Log removal
+                console.log('Removed from cart:', { item: item.item, price: item.price, newTotal: totalAmount });
+            } catch (error) {
+                console.error('Error removing item from cart:', error);
+                alert('There was an error removing the item from cart. Please try again.');
+            }
+        }
+
+        function showPayment() {
             if (cart.length === 0) {
                 alert("Your cart is empty! Please add items before proceeding to payment.");
                 return;
@@ -974,7 +1112,9 @@ https://youtube.com/@amityuniversity3146?feature=shared"><i class="fab fa-youtub
             document.getElementById("paymentSection").style.display = "block";
             document.getElementById("payNowBtn").style.display = "none";
             updateCoinsDisplay(); // Update the coins balance display
-        }        function selectPaymentMethod(method) {
+        }
+
+        function selectPaymentMethod(method) {
             document.querySelectorAll('.payment-method').forEach(div => {
                 div.classList.remove('selected');
             });
@@ -1000,76 +1140,88 @@ https://youtube.com/@amityuniversity3146?feature=shared"><i class="fab fa-youtub
                 document.getElementById('cvv').value = '';
                 updateCoinsPreview();
             }
-        }        // Load saved coins balance from localStorage        function loadCoinsBalance() {
-            return parseInt(localStorage.getItem('coinsBalance') || '1000'); // Default 1000 coins for testing
         }
 
-        // Update coins balance display
+        function loadCoinsBalance() {
+            return parseInt(localStorage.getItem('coinsBalance') || '1000');
+        }
+
         function updateCoinsDisplay() {
             const coinsBalance = loadCoinsBalance();
-            document.getElementById('coinBalance').textContent = coinsBalance;
-        }
-
-        // Save coins balance to localStorage
-        function saveCoinsBalance(balance) {
-            localStorage.setItem('coinsBalance', balance.toString());
-        }
-
-        // Update the coins preview when selecting coin payment
-        function updateCoinsPreview() {
-            const currentBalance = loadCoinsBalance();
-            const requiredCoins = totalAmount; // 1 coin = 1 rupee
-            const remaining = currentBalance - requiredCoins;
-            
-            document.getElementById('coinBalance').textContent = currentBalance;
-            document.getElementById('coinsToDeduct').textContent = requiredCoins;
-            document.getElementById('remainingCoins').textContent = remaining >= 0 ? remaining : 0;
-            
-            const errorElement = document.getElementById('coinsError');
-            const confirmElement = document.getElementById('coinPaymentConfirm');
-            
-            if (remaining < 0) {
-                errorElement.style.display = 'block';
-                errorElement.textContent = `Insufficient coins balance. Required: ${requiredCoins} coins, Available: ${currentBalance} coins`;
-                confirmElement.style.display = 'none';
-            } else {
-                errorElement.style.display = 'none';
-                confirmElement.style.display = 'block';
+            const element = document.getElementById('coinBalance');
+            if (element) {
+                element.textContent = coinsBalance;
             }
         }
 
-        // Handle coin payment confirmation
+        function saveCoinsBalance(balance) {
+            if (typeof balance === 'number' && balance >= 0) {
+                localStorage.setItem('coinsBalance', balance.toString());
+            }
+        }
+
+        function updateCoinsPreview() {
+            try {
+                const currentBalance = loadCoinsBalance();
+                const requiredCoins = totalAmount;
+                const remaining = currentBalance - requiredCoins;
+                
+                const balanceElement = document.getElementById('coinBalance');
+                const deductElement = document.getElementById('coinsToDeduct');
+                const remainingElement = document.getElementById('remainingCoins');
+                const errorElement = document.getElementById('coinsError');
+                const confirmElement = document.getElementById('coinPaymentConfirm');
+                
+                if (!balanceElement || !deductElement || !remainingElement || !errorElement || !confirmElement) {
+                    throw new Error('Required coin payment elements not found');
+                }
+                
+                balanceElement.textContent = currentBalance;
+                deductElement.textContent = requiredCoins;
+                remainingElement.textContent = remaining >= 0 ? remaining : 0;
+                
+                if (remaining < 0) {
+                    errorElement.style.display = 'block';
+                    errorElement.textContent = `Insufficient coins balance. Required: ${requiredCoins} coins, Available: ${currentBalance} coins`;
+                    confirmElement.style.display = 'none';
+                } else {
+                    errorElement.style.display = 'none';
+                    confirmElement.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Error updating coins preview:', error);
+            }
+        }
+
         function confirmCoinPayment() {
-            const currentBalance = loadCoinsBalance();
-            const requiredCoins = totalAmount;
-            
-            if (currentBalance >= requiredCoins) {
-                const newBalance = currentBalance - requiredCoins;
-                saveCoinsBalance(newBalance);
-                updateCoinsDisplay();
+            try {
+                const currentBalance = loadCoinsBalance();
+                const requiredCoins = totalAmount;
                 
-                const order = {
-                    date: new Date().toLocaleString(),
-                    items: cart.map(({item, price}) => ({name: item, qty: 1, price})),
-                    total: totalAmount,
-                    payment: `Coins (${requiredCoins} coins)`
-                };
-                saveOrderToHistory(order);
-                
-                showPaymentStatus(`Payment successful! ${requiredCoins} coins deducted. New balance: ${newBalance} coins`, 'success');
-                
-                setTimeout(() => {
-                    document.getElementById("paymentSection").style.display = "none";
-                    document.getElementById("payNowBtn").style.display = "block";
-                    document.getElementById("payNowBtn").textContent = "Place New Order";
-                    const orderSummary = cart.map(item => item.item).join(', ');
-                    document.getElementById('orderItems').textContent = `Order: ${orderSummary}`;
-                    document.getElementById('thankYouModal').style.display = 'flex';
-                    createConfetti();
-                    paymentProcessed = true;
-                }, 1500);
-            } else {
-                showPaymentStatus('Insufficient coins balance', 'error');
+                if (currentBalance >= requiredCoins) {
+                    const newBalance = currentBalance - requiredCoins;
+                    saveCoinsBalance(newBalance);
+                    updateCoinsDisplay();
+                    
+                    const order = {
+                        date: new Date().toLocaleString(),
+                        items: cart.map(({item, price}) => ({name: item, qty: 1, price})),
+                        total: totalAmount,
+                        payment: `Coins (${requiredCoins} coins)`
+                    };
+                    saveOrderToHistory(order);
+                    
+                    showPaymentStatus(`Payment successful! ${requiredCoins} coins deducted. New balance: ${newBalance} coins`, 'success');
+                    
+                    setTimeout(() => {
+                        completeOrder();
+                    }, 1500);
+                } else {
+                    showPaymentStatus('Insufficient coins balance', 'error');
+                }
+            } catch (error) {
+                console.error('Error processing coin payment:', error);
+                showPaymentStatus('Error processing payment', 'error');
             }
         }
 
@@ -1079,81 +1231,88 @@ https://youtube.com/@amityuniversity3146?feature=shared"><i class="fab fa-youtub
                 showPaymentStatus('Please select a payment method', 'error');
                 return;
             }
+
             const method = selectedMethod.value;
             showPaymentStatus('Processing payment...', 'pending');
-            setTimeout(() => {
-                let success = true;
-                let message = '';
-                switch (method) {
-                    case 'upi':
-                        const upiId = document.getElementById('upiId').value.trim();
-                        const upiRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z]{3,}$/;
-                        if (!upiId || !upiRegex.test(upiId)) {
-                            success = false;
-                            message = 'Please enter a valid UPI ID (e.g., user@upi)';
-                        } else {
-                            message = `Payment of Rs ${totalAmount} successful via UPI (${upiId})`;
-                        }
-                        break;                    case 'coins':
-                        const coinsBalance = loadCoinsBalance();
-                        const requiredCoins = totalAmount; // 1 Rs = 1 coin
-                        if (coinsBalance < requiredCoins) {
-                            success = false;
-                            message = `Insufficient coins balance. Required: ${requiredCoins} coins, Available: ${coinsBalance} coins`;
-                        } else {
-                            const newBalance = coinsBalance - requiredCoins;
-                            saveCoinsBalance(newBalance);
-                            updateCoinsDisplay();
-                            message = `Payment of Rs ${totalAmount} successful via Coins (${requiredCoins} coins deducted)`;
-                        }
-                        break;
-                    case 'card':
-                        const cardNumber = document.getElementById('cardNumber').value.trim();
-                        const expiry = document.getElementById('expiry').value.trim();
-                        const cvv = document.getElementById('cvv').value.trim();
-                        if (!cardNumber || cardNumber.replace(/\s/g, '').length !== 16) {
-                            success = false;
-                            message = 'Please enter a valid 16-digit card number';
-                        } else if (!expiry || !expiry.match(/^\d{2}\/\d{2}$/)) {
-                            success = false;
-                            message = 'Please enter a valid expiry date (MM/YY)';
-                        } else if (!cvv || cvv.length !== 3) {
-                            success = false;
-                            message = 'Please enter a valid 3-digit CVV';
-                        } else {
-                            const maskedCard = cardNumber.slice(-4).padStart(16, '*').replace(/(.{4})/g, '$1 ').trim();
-                            message = `Payment of Rs ${totalAmount} successful via Card (${maskedCard})`;
-                        }
-                        break;
-                }
-                if (success) {
-                    paymentProcessed = true;
-                    showPaymentStatus(message, 'success');
-                    const order = {
-                        date: new Date().toLocaleString(),
-                        items: cart.map(({item, price}) => ({name: item, qty: 1, price})),
-                        total: totalAmount,
-                        payment: method === 'upi' ? `UPI (${document.getElementById('upiId').value.trim()})` : `Card (${document.getElementById('cardNumber').value.trim().slice(-4)})`
-                    };
-                    saveOrderToHistory(order);
-                    setTimeout(() => {
-                        document.getElementById("paymentSection").style.display = "none";
-                        document.getElementById("payNowBtn").style.display = "block";
-                        document.getElementById("payNowBtn").textContent = "Place New Order";
-                        const orderSummary = cart.map(item => item.item).join(', ');
-                        document.getElementById('orderItems').textContent = `Order: ${orderSummary}`;
-                        document.getElementById('thankYouModal').style.display = 'flex';
-                        createConfetti();
-                    }, 1500);
-                } else {
-                    showPaymentStatus(message, 'error');
-                }
-            }, 1500);
+
+            try {
+                setTimeout(() => {
+                    let success = true;
+                    let message = '';
+
+                    switch (method) {
+                        case 'upi':
+                            const upiId = document.getElementById('upiId').value.trim();
+                            const upiRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z]{3,}$/;
+                            if (!upiId || !upiRegex.test(upiId)) {
+                                success = false;
+                                message = 'Please enter a valid UPI ID (e.g., user@upi)';
+                            } else {
+                                message = `Payment of Rs ${totalAmount} successful via UPI (${upiId})`;
+                            }
+                            break;
+
+                        case 'card':
+                            const cardNumber = document.getElementById('cardNumber').value.trim();
+                            const expiry = document.getElementById('expiry').value.trim();
+                            const cvv = document.getElementById('cvv').value.trim();
+                            if (!cardNumber || cardNumber.replace(/\s/g, '').length !== 16) {
+                                success = false;
+                                message = 'Please enter a valid 16-digit card number';
+                            } else if (!expiry || !expiry.match(/^\d{2}\/\d{2}$/)) {
+                                success = false;
+                                message = 'Please enter a valid expiry date (MM/YY)';
+                            } else if (!cvv || cvv.length !== 3) {
+                                success = false;
+                                message = 'Please enter a valid 3-digit CVV';
+                            } else {
+                                const maskedCard = cardNumber.slice(-4).padStart(16, '*').replace(/(.{4})/g, '$1 ').trim();
+                                message = `Payment of Rs ${totalAmount} successful via Card (${maskedCard})`;
+                            }
+                            break;
+                    }
+
+                    if (success) {
+                        paymentProcessed = true;
+                        showPaymentStatus(message, 'success');
+
+                        const order = {
+                            date: new Date().toLocaleString(),
+                            items: cart.map(({item, price}) => ({name: item, qty: 1, price})),
+                            total: totalAmount,
+                            payment: method === 'upi' 
+                                ? `UPI (${document.getElementById('upiId').value.trim()})` 
+                                : `Card (${document.getElementById('cardNumber').value.trim().slice(-4)})`
+                        };
+                        saveOrderToHistory(order);
+
+                        setTimeout(() => {
+                            completeOrder();
+                        }, 1500);
+                    } else {
+                        showPaymentStatus(message, 'error');
+                    }
+                }, 1500);
+            } catch (error) {
+                console.error('Error processing payment:', error);
+                showPaymentStatus('Error processing payment', 'error');
+            }
+        }
+
+        function completeOrder() {
+            document.getElementById("paymentSection").style.display = "none";
+            document.getElementById("payNowBtn").style.display = "block";
+            document.getElementById("payNowBtn").textContent = "Place New Order";
+            const orderSummary = cart.map(item => item.item).join(', ');
+            document.getElementById('orderItems').textContent = `Order: ${orderSummary}`;
+            document.getElementById('thankYouModal').style.display = 'flex';
+            createConfetti();
         }
 
         function createConfetti() {
             const confettiCount = 100;
             const colors = ['#f39c12', '#e74c3c', '#3498db', '#2ecc71', '#9b59b6'];
+            
             for (let i = 0; i < confettiCount; i++) {
                 const confetti = document.createElement('div');
                 confetti.className = 'confetti';
@@ -1165,6 +1324,7 @@ https://youtube.com/@amityuniversity3146?feature=shared"><i class="fab fa-youtub
                 confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
                 confetti.style.animationDelay = Math.random() * 2 + 's';
                 document.body.appendChild(confetti);
+                
                 setTimeout(() => {
                     confetti.remove();
                 }, 5000);
@@ -1173,23 +1333,41 @@ https://youtube.com/@amityuniversity3146?feature=shared"><i class="fab fa-youtub
 
         function showPaymentStatus(message, type) {
             const statusDiv = document.getElementById('paymentStatus');
-            statusDiv.textContent = message;
-            statusDiv.className = 'payment-status ' + type;
-            statusDiv.style.display = 'block';
+            if (statusDiv) {
+                statusDiv.textContent = message;
+                statusDiv.className = 'payment-status ' + type;
+                statusDiv.style.display = 'block';
+            }
         }
 
         function resetOrder() {
             cart = [];
             totalAmount = 0;
             paymentProcessed = false;
+            
             updateCart();
-            document.getElementById('paymentStatus').style.display = 'none';
-            document.getElementById('payNowBtn').textContent = 'Proceed to Payment';
-            document.getElementById('payNowBtn').style.display = 'block';
-            document.getElementById('upiId').value = '';
-            document.getElementById('cardNumber').value = '';
-            document.getElementById('expiry').value = '';
-            document.getElementById('cvv').value = '';
+            
+            const elements = {
+                paymentStatus: document.getElementById('paymentStatus'),
+                payNowBtn: document.getElementById('payNowBtn'),
+                upiId: document.getElementById('upiId'),
+                cardNumber: document.getElementById('cardNumber'),
+                expiry: document.getElementById('expiry'),
+                cvv: document.getElementById('cvv')
+            };
+            
+            if (elements.paymentStatus) elements.paymentStatus.style.display = 'none';
+            if (elements.payNowBtn) {
+                elements.payNowBtn.textContent = 'Proceed to Payment';
+                elements.payNowBtn.style.display = 'block';
+            }
+            
+            // Clear input fields
+            Object.values(elements).forEach(el => {
+                if (el && el.tagName === 'INPUT') el.value = '';
+            });
+            
+            // Reset radio buttons and payment sections
             document.querySelectorAll('input[name="payment"]').forEach(input => {
                 input.checked = false;
             });
@@ -1210,6 +1388,7 @@ https://youtube.com/@amityuniversity3146?feature=shared"><i class="fab fa-youtub
             window.location.href = 'https://pavaniba02.github.io/Cafeteria-Pre-Order-System/';
         }
 
+        // Card input formatting
         document.getElementById('cardNumber').addEventListener('input', function(e) {
             let value = e.target.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
             if (value.length > 16) value = value.substr(0, 16);
@@ -1232,55 +1411,78 @@ https://youtube.com/@amityuniversity3146?feature=shared"><i class="fab fa-youtub
             }
         });
 
+        // Dark mode functionality
         (function syncDarkMode() {
             var isDark = false;
             try {
                 isDark = localStorage.getItem('theme') === 'dark' || sessionStorage.getItem('theme') === 'dark';
-            } catch (e) {}
+            } catch (e) {
+                console.error('Error checking dark mode:', e);
+            }
             if (isDark) {
                 document.body.classList.add('dark-mode');
             }
         })();
 
-    // Order history functionality
-    let orderHistory = [];
+        // Order history functionality
+        function openHistoryModal() {
+            const modal = document.getElementById('historyModal');
+            const list = document.getElementById('orderHistoryList');
+            
+            try {
+                let history = JSON.parse(localStorage.getItem('orderHistory') || '[]');
+                if (history.length === 0) {
+                    list.innerHTML = '<div style="text-align:center;color:#888;">No orders yet.</div>';
+                } else {
+                    list.innerHTML = history.map((order, idx) => `
+                        <div class="order-history-item">
+                            <div><b>Date:</b> ${order.date}</div>
+                            <div><b>Items:</b> ${order.items.map(i => `${i.name} x${i.qty}`).join(', ')}</div>
+                            <div><b>Total:</b> ₹${order.total}</div>
+                            <div><b>Payment:</b> ${order.payment}</div>
+                            <button class="reorder-btn" onclick="reorder(${idx})">Reorder</button>
+                        </div>
+                    `).join('');
+                }
+                modal.style.display = 'flex';
+            } catch (error) {
+                console.error('Error opening history modal:', error);
+            }
+        }
 
-    function openHistoryModal() {
-        const modal = document.getElementById('historyModal');
-        const list = document.getElementById('orderHistoryList');
-        let history = JSON.parse(localStorage.getItem('orderHistory') || '[]');
-        if (history.length === 0) {
-            list.innerHTML = '<div style="text-align:center;color:#888;">No orders yet.</div>';
-        } else {
-            list.innerHTML = history.map((order, idx) => `
-                <div class=\"order-history-item\">\n                    <div><b>Date:</b> ${order.date}</div>\n                    <div><b>Items:</b> ${order.items.map(i => `${i.name} x${i.qty}`).join(', ')}</div>\n                    <div><b>Total:</b> ₹${order.total}</div>\n                    <div><b>Payment:</b> ${order.payment}</div>\n                    <button class=\"reorder-btn\" onclick=\"reorder(${idx})\">Reorder</button>\n                </div>
-            `).join('');
+        function closeHistoryModal() {
+            document.getElementById('historyModal').style.display = 'none';
         }
-        modal.style.display = 'flex';
-    }
-    function closeHistoryModal() {
-        document.getElementById('historyModal').style.display = 'none';
-    }
-    function reorder(idx) {
-        let history = JSON.parse(localStorage.getItem('orderHistory') || '[]');
-        if (history[idx]) {
-            cart = history[idx].items.map(i => ({ item: i.name, price: i.price }));
-            totalAmount = cart.reduce((sum, item) => sum + item.price, 0);
-            paymentProcessed = false;
-            updateCart();
-            closeHistoryModal();
-            document.getElementById('paymentSection').style.display = 'block';
-            document.getElementById('payNowBtn').style.display = 'none';
-            setTimeout(function() {
-                document.getElementById('paymentSection').scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }, 200);
+
+        function reorder(idx) {
+            try {
+                let history = JSON.parse(localStorage.getItem('orderHistory') || '[]');
+                if (history[idx]) {
+                    cart = history[idx].items.map(i => ({ item: i.name, price: i.price }));
+                    totalAmount = cart.reduce((sum, item) => sum + item.price, 0);
+                    paymentProcessed = false;
+                    updateCart();
+                    closeHistoryModal();
+                    document.getElementById('paymentSection').style.display = 'block';
+                    document.getElementById('payNowBtn').style.display = 'none';
+                    setTimeout(function() {
+                        document.getElementById('paymentSection').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }, 200);
+                }
+            } catch (error) {
+                console.error('Error reordering:', error);
+            }
         }
-    }
-    function saveOrderToHistory(order) {
-        let history = JSON.parse(localStorage.getItem('orderHistory') || '[]');
-        history.push(order);
-        localStorage.setItem('orderHistory', JSON.stringify(history));
-    }
+
+        function saveOrderToHistory(order) {
+            try {
+                let history = JSON.parse(localStorage.getItem('orderHistory') || '[]');
+                history.push(order);
+                localStorage.setItem('orderHistory', JSON.stringify(history));
+            } catch (error) {
+                console.error('Error saving order to history:', error);
+            }
+        }
     </script>
 </body>
 </html>
