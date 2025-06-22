@@ -1670,6 +1670,7 @@
                 // Remove OTP after 2 minutes
                 setTimeout(() => {
                     if (document.getElementById('otpDisplay')) {
+
                         document.getElementById('otpDisplay').textContent = 'OTP expired. Please request a new OTP.';
                     }
                 }, 120000);
