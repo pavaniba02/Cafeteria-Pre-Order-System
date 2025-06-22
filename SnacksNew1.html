@@ -727,6 +727,9 @@ footer {
             <p>Your snacks are being prepared with care and will be ready soon.</p>
             <p id="orderItems" style="font-size: 0.9rem; color: var(--dark-text); font-style: italic;"></p>
             <button class="close-btn" onclick="closeThankYou()">Place New Order</button>
+            <button class="close-btn" onclick="goToHomePage()" style="margin-top:0.7rem;">
+                <i class="fas fa-home"></i> Go Back to Home Page
+            </button>
         </div>
     </div>    <!-- Animation elements -->
     <div id="itemAdded" class="item-added">Item added to cart!</div>
@@ -990,6 +993,10 @@ footer {
       document.getElementById('thankYouModal').style.display = 'none';
       resetOrder();
     }
+    
+    function goToHomePage() {
+    window.location.href = 'https://pavaniba02.github.io/Cafeteria-Pre-Order-System/';
+}
     
     // Format card number with spaces after every 4 digits
     document.getElementById('cardNumber').addEventListener('input', function(e) {
