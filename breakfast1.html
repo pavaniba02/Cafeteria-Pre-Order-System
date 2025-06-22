@@ -905,41 +905,21 @@ https://youtube.com/@amityuniversity3146?feature=shared"><i class="fab fa-youtub
         <p class="footer-text">
             © 2025 AMITY CAFETERIA • ALL RIGHTS RESERVED
         </p>
-    </footer>    <script>
-        // Initialize variables
+    </footer>
+
+    <script>
         let cart = [];
         let totalAmount = 0;
         let paymentProcessed = false;
 
-        // Initialize when the document loads
-        document.addEventListener('DOMContentLoaded', function() {
-            updateCart();
-            updateCoinsDisplay();
-        });        function addToCart(item, price) {
-            try {
-                // Reset if there was a previous completed order
-                if (paymentProcessed) {
-                    resetOrder();
-                }
-                
-                // Add item to cart
-                cart.push({ item, price });
-                totalAmount += price;
-                
-                // Update UI
-                updateCart();
-                showAddToCartAnimation();
-                
-                // Show success message
-                const itemAdded = document.getElementById('itemAdded');
-                itemAdded.textContent = `${item} added to cart!`;
-                itemAdded.style.display = 'block';
-                
-                console.log('Added to cart:', { item, price, totalAmount, cartSize: cart.length });
-            } catch (error) {
-                console.error('Error adding to cart:', error);
-                alert('Sorry, there was an error adding the item to cart. Please try again.');
+        function addToCart(item, price) {
+            if (paymentProcessed) {
+                resetOrder();
             }
+            cart.push({ item, price });
+            totalAmount += price;
+            updateCart();
+            showAddToCartAnimation();
         }
         function showAddToCartAnimation() {
             const itemAdded = document.getElementById('itemAdded');
@@ -950,57 +930,35 @@ https://youtube.com/@amityuniversity3146?feature=shared"><i class="fab fa-youtub
             setTimeout(() => {
                 itemAdded.style.display = 'none';
             }, 2000);
-        }        function updateCart() {
-            try {
-                const cartDiv = document.getElementById('cartItems');
-                const totalDiv = document.getElementById('total');
-                
-                if (!cartDiv || !totalDiv) {
-                    console.error('Cart elements not found');
-                    return;
-                }
-                
-                // Clear the cart display
-                cartDiv.innerHTML = '';
-                
-                // Show empty cart message if no items
-                if (cart.length === 0) {
-                    cartDiv.innerHTML = '<p style="text-align: center; color: #666;">Your cart is empty</p>';
-                    totalDiv.textContent = 'Total: Rs 0';
-                    return;
-                }
-                
-                // Add each item to the cart display
-                cart.forEach(({ item, price }, index) => {
-                    const itemDiv = document.createElement('div');
-                    itemDiv.className = 'cart-item';
-                    
-                    const nameSpan = document.createElement('span');
-                    nameSpan.className = 'cart-item-name';
-                    nameSpan.textContent = item;
-                    
-                    const priceSpan = document.createElement('span');
-                    priceSpan.className = 'cart-item-price';
-                    priceSpan.textContent = `Rs ${price}`;
-                    
-                    const removeBtn = document.createElement('button');
-                    removeBtn.className = 'remove-btn';
-                    removeBtn.innerHTML = '&times;';
-                    removeBtn.onclick = () => removeFromCart(index);
-                    
-                    itemDiv.appendChild(nameSpan);
-                    itemDiv.appendChild(priceSpan);
-                    itemDiv.appendChild(removeBtn);
-                    cartDiv.appendChild(itemDiv);
-                });
-                
-                // Update total
-                totalDiv.textContent = `Total: Rs ${totalAmount}`;
-                
-                console.log('Cart updated:', { items: cart.length, total: totalAmount });
-            } catch (error) {
-                console.error('Error updating cart:', error);
+        }
+
+        function updateCart() {
+            const cartDiv = document.getElementById('cartItems');
+            cartDiv.innerHTML = '';
+            if (cart.length === 0) {
+                cartDiv.innerHTML = '<p style="text-align: center; color: #666;">Your cart is empty</p>';
+                document.getElementById('total').textContent = 'Total: Rs 0';
+                return;
             }
+            cart.forEach(({ item, price }, index) => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'cart-item';
+                const nameSpan = document.createElement('span');
+                nameSpan.className = 'cart-item-name';
+                nameSpan.textContent = item;
+                const priceSpan = document.createElement('span');
+                priceSpan.className = 'cart-item-price';
+                priceSpan.textContent = `Rs ${price}`;
+                const removeBtn = document.createElement('button');
+                removeBtn.className = 'remove-btn';
+                removeBtn.innerHTML = '&times;';
+                removeBtn.onclick = () => removeFromCart(index);
+                itemDiv.appendChild(nameSpan);
+                itemDiv.appendChild(priceSpan);
+                itemDiv.appendChild(removeBtn);
+                cartDiv.appendChild(itemDiv);
+            });
+            document.getElementById('total').textContent = `Total: Rs ${totalAmount}`;
         }
 
         function removeFromCart(index) {
