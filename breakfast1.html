@@ -823,8 +823,7 @@ body.dark-mode .item-added {
                     <label for="upiId">Enter UPI ID:</label>
                     <input type="text" id="upiId" class="form-control" placeholder="example@upi">
                 </div>
-                
-                <div class="payment-method" onclick="selectPaymentMethod('card')">
+                  <div class="payment-method" onclick="selectPaymentMethod('card')">
                     <input type="radio" name="payment" id="card" value="card"> 
                     <label for="card"><strong>Debit/Credit Card</strong></label>
                 </div>
@@ -832,6 +831,15 @@ body.dark-mode .item-added {
                 <div id="cardDetails" class="payment-details">
                     <label for="cardNumber">Card Number:</label>
                     <input type="text" id="cardNumber" class="form-control" placeholder="1234 5678 9012 3456" maxlength="19">
+
+                <div class="payment-method" onclick="selectPaymentMethod('coins')">
+                    <input type="radio" name="payment" id="coins" value="coins"> 
+                    <label for="coins"><strong>Pay with Coins</strong></label>
+                </div>
+                  <div id="coinsDetails" class="payment-details">
+                    <p>Available Coins Balance: <span id="coinBalance">0</span> coins (1 coin = 1 rupee)</p>
+                    <p id="coinsError" style="color: var(--error-color); display: none;">Insufficient coins balance</p>
+                </div>
                     
                     <div style="display: flex; gap: 10px; margin-top: 10px;">
                         <div style="flex: 1;">
@@ -954,15 +962,14 @@ https://youtube.com/@amityuniversity3146?feature=shared"><i class="fab fa-youtub
             totalAmount -= item.price;
             cart.splice(index, 1);
             updateCart();
-        }
-
-        function showPayment() {
+        }        function showPayment() {
             if (cart.length === 0) {
                 alert("Your cart is empty! Please add items before proceeding to payment.");
                 return;
             }
             document.getElementById("paymentSection").style.display = "block";
             document.getElementById("payNowBtn").style.display = "none";
+            updateCoinsDisplay(); // Update the coins balance display
         }
         function selectPaymentMethod(method) {
             document.querySelectorAll('.payment-method').forEach(div => {
@@ -982,6 +989,20 @@ https://youtube.com/@amityuniversity3146?feature=shared"><i class="fab fa-youtub
             document.getElementById(method).parentElement.classList.add('selected');
             document.getElementById(`${method}Details`).style.display = 'block';
             document.getElementById('paymentStatus').style.display = 'none';
+        }        // Load saved coins balance from localStorage
+        function loadCoinsBalance() {
+            return parseInt(localStorage.getItem('coinsBalance') || '1000'); // Default 1000 coins for testing
+        }
+
+        // Update coins balance display
+        function updateCoinsDisplay() {
+            const coinsBalance = loadCoinsBalance();
+            document.getElementById('coinBalance').textContent = coinsBalance;
+        }
+
+        // Save coins balance to localStorage
+        function saveCoinsBalance(balance) {
+            localStorage.setItem('coinsBalance', balance.toString());
         }
 
         function processPayment() {
@@ -1004,6 +1025,18 @@ https://youtube.com/@amityuniversity3146?feature=shared"><i class="fab fa-youtub
                             message = 'Please enter a valid UPI ID (e.g., user@upi)';
                         } else {
                             message = `Payment of Rs ${totalAmount} successful via UPI (${upiId})`;
+                        }
+                        break;                    case 'coins':
+                        const coinsBalance = loadCoinsBalance();
+                        const requiredCoins = totalAmount; // 1 Rs = 1 coin
+                        if (coinsBalance < requiredCoins) {
+                            success = false;
+                            message = `Insufficient coins balance. Required: ${requiredCoins} coins, Available: ${coinsBalance} coins`;
+                        } else {
+                            const newBalance = coinsBalance - requiredCoins;
+                            saveCoinsBalance(newBalance);
+                            updateCoinsDisplay();
+                            message = `Payment of Rs ${totalAmount} successful via Coins (${requiredCoins} coins deducted)`;
                         }
                         break;
                     case 'card':
