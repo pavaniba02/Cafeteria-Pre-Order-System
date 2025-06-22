@@ -440,7 +440,7 @@
         }
 
         .snacks-card .card-image {
-            background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url('Dhai puri.jpeg');
+            background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url('Veg burger.jpeg');
             background-size: cover;
             background-position: center;
         }
@@ -1081,7 +1081,12 @@
             </form>
         </div>
     </div>
-
+<!-- End Swiggy-like Profile Dropdown -->
+<div style="height:18px;"></div>
+<button class="history-btn" id="historyBtnHeader" style="width:100%;margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:0.6rem;font-size:1.08rem;background:#d4a017;color:#1a3a6e;border-radius:8px;padding:0.7rem 0;box-shadow:0 2px 8px #0001;" onclick="openHistoryModal()">
+  <i class="fas fa-history"></i> History
+</button>
+<button class="about-cafe-btn" id="aboutCafeBtnHeader"><i class="fas fa-info-circle"></i> About Cafeteria</button>
     <!-- About Modal -->
     <div id="aboutModal" class="about-modal">
         <div class="modal-content">
@@ -1208,6 +1213,16 @@
       </div>
     </div>
 
+    <!-- Order History Modal -->
+    <div id="historyModal" class="modal">
+      <div class="modal-content" style="max-width:420px;width:95vw;position:relative;">
+        <span class="close" onclick="closeHistoryModal()" style="cursor:pointer;font-size:1.5rem;position:absolute;top:10px;right:18px;">&times;</span>
+        <h3 style="text-align:center;">Order History</h3>
+        <div id="orderHistoryList" class="order-history-list"></div>
+        <button class="submit-btn" onclick="closeHistoryModal()" style="margin-top:1.2rem;width:100%;background:#dc3545;">Cancel</button>
+      </div>
+    </div>
+
     <main>
         <div class="welcome-section">
             <h2>Welcome to Our Cafeteria</h2>
@@ -1268,6 +1283,16 @@
             <p class="footer-text">© 2025 Amity Cafeteria. All rights reserved.</p>
         </div>
     </footer>
+
+    <!-- Order History Modal -->
+    <div id="historyModal" class="modal">
+      <div class="modal-content" style="max-width:420px;width:95vw;position:relative;">
+        <span class="close" onclick="closeHistoryModal()" style="cursor:pointer;font-size:1.5rem;position:absolute;top:10px;right:18px;">&times;</span>
+        <h3 style="text-align:center;">Order History</h3>
+        <div id="orderHistoryList" class="order-history-list"></div>
+        <button class="submit-btn" onclick="closeHistoryModal()" style="margin-top:1.2rem;width:100%;background:#dc3545;">Cancel</button>
+      </div>
+    </div>
 
     <script>
         // Get modals and forms
@@ -1396,6 +1421,10 @@
             }
             if (event.target == aboutCafeModal) {
                 aboutCafeModal.style.display = 'none';
+            }
+            const historyModal = document.getElementById('historyModal');
+            if (event.target == historyModal) {
+                historyModal.style.display = 'none';
             }
         }
 
@@ -1633,31 +1662,7 @@
         }
         updateCoinsDisplay();
 
-        const addCoinsBtn = document.getElementById('addCoinsBtn');
-        const addCoinsModal = document.getElementById('addCoinsModal');
-        const closeAddCoinsModalBtn = document.getElementById('closeAddCoinsModal');
-        const addCoinsStep1 = document.getElementById('addCoinsStep1');
-        const addCoinsStep2 = document.getElementById('addCoinsStep2');
-        const addCoinsStep3 = document.getElementById('addCoinsStep3');
-        const sendOtpBtn = document.getElementById('sendOtpBtn');
-        const verifyOtpBtn = document.getElementById('verifyOtpBtn');
-        const addCoinsFinalBtn = document.getElementById('addCoinsFinalBtn');
-        const addCoinsMessage = document.getElementById('addCoinsMessage');
-        let generatedOtp = '';
-        let verifiedMobile = '';
-
-        addCoinsBtn.onclick = function() {
-            addCoinsModal.style.display = 'flex';
-            addCoinsStep1.style.display = '';
-            addCoinsStep2.style.display = 'none';
-            addCoinsStep3.style.display = 'none';
-            addCoinsMessage.textContent = '';
-            document.getElementById('addCoinsPhone').value = '';
-            document.getElementById('addCoinsOtp').value = '';
-            document.getElementById('addCoinsAmount').value = '';
-        };
-        closeAddCoinsModalBtn.onclick = function() {
-            addCoinsModal.style.display = 'none';
+        const addCoinsBtn = document.getElementById
         };
         sendOtpBtn.onclick = function() {
             const phone = document.getElementById('addCoinsPhone').value.trim();
@@ -1722,6 +1727,46 @@
             if (e.target === addCoinsModal) addCoinsModal.style.display = 'none';
         });
         // --- End Add Coins Modal Logic ---
+        <!-- Order History Modal -->
+<div id="historyModal" class="modal">
+  <div class="modal-content" style="max-width:420px;width:95vw;position:relative;">
+    <span class="close" onclick="closeHistoryModal()" style="cursor:pointer;font-size:1.5rem;position:absolute;top:10px;right:18px;">&times;</span>
+    <h3 style="text-align:center;">Order History</h3>
+    <div id="orderHistoryList" class="order-history-list"></div>
+    <button class="submit-btn" onclick="closeHistoryModal()" style="margin-top:1.2rem;width:100%;background:#dc3545;">Cancel</button>
+  </div>
+</div>
+// Order history functionality for all meals
+function openHistoryModal() {
+    const modal = document.getElementById('historyModal');
+    const list = document.getElementById('orderHistoryList');
+    // Collect all order histories from breakfast, lunch, snacks
+    let allHistory = [];
+    let keys = ['orderHistory', 'orderHistoryLunch', 'orderHistorySnacks'];
+    keys.forEach(key => {
+        let h = JSON.parse(localStorage.getItem(key) || '[]');
+        if (Array.isArray(h)) allHistory = allHistory.concat(h.map(o => ({...o, meal: key.replace('orderHistory','') || 'Breakfast'})));
+    });
+    if (allHistory.length === 0) {
+        list.innerHTML = '<div style="text-align:center;color:#888;">No orders yet.</div>';
+    } else {
+        // Sort by date descending
+        allHistory.sort((a, b) => new Date(b.date) - new Date(a.date));
+        list.innerHTML = allHistory.map((order, idx) => `
+            <div class="order-history-item" style="background:#fff9e1;border-radius:10px;margin-bottom:1.1rem;padding:1rem 1rem 0.7rem 1rem;box-shadow:0 2px 8px #0001;border:1px solid #f7e6b2;">
+                <div><b>Date:</b> ${order.date}</div>
+                <div><b>Meal:</b> ${order.meal.charAt(0).toUpperCase() + order.meal.slice(1)}</div>
+                <div><b>Items:</b> ${order.items.map(i => `${i.name} x${i.qty}`).join(', ')}</div>
+                <div><b>Total:</b> ₹${order.total}</div>
+                <div><b>Payment:</b> ${order.payment}</div>
+            </div>
+        `).join('');
+    }
+    modal.style.display = 'block';
+}
+function closeHistoryModal() {
+    document.getElementById('historyModal').style.display = 'none';
+}
     </script>
 </body>
 </html>
