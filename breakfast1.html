@@ -614,6 +614,50 @@
         .order-btn:hover {
             background: #1a2536;
         }
+
+        /* Dark mode styles for breakfast2.html */
+body.dark-mode {
+    background: #181a1b !important;
+    color: #f1f1f1 !important;
+}
+body.dark-mode .main-container,
+body.dark-mode .menu-section,
+body.dark-mode .order-summary-section,
+body.dark-mode .thank-you-content {
+    background: #23272b !important;
+    color: #f1f1f1 !important;
+    border-color: #444 !important;
+}
+body.dark-mode .uni-title {
+    color: #ffd700 !important;
+}
+body.dark-mode .system-title {
+    color: #f1f1f1 !important;
+}
+body.dark-mode .pay-btn,
+body.dark-mode .order-btn,
+body.dark-mode .close-btn,
+body.dark-mode .home-btn {
+    background: #444 !important;
+    color: #ffd700 !important;
+    border: 1px solid #ffd700 !important;
+}
+body.dark-mode .pay-btn:hover,
+body.dark-mode .order-btn:hover,
+body.dark-mode .close-btn:hover,
+body.dark-mode .home-btn:hover {
+    background: #222 !important;
+}
+body.dark-mode input,
+body.dark-mode select {
+    background: #23272b !important;
+    color: #f1f1f1 !important;
+    border: 1px solid #444 !important;
+}
+body.dark-mode .item-added {
+    background: #23272b !important;
+    color: #ffd700 !important;
+}
     </style>
 </head>
 <body>
@@ -1059,6 +1103,17 @@ https://youtube.com/@amityuniversity3146?feature=shared"><i class="fab fa-youtub
                 }
             }
         });
+        
+        (function syncDarkMode() {
+    // Check localStorage or sessionStorage for dark mode preference
+    var isDark = false;
+    try {
+        isDark = localStorage.getItem('theme') === 'dark' || sessionStorage.getItem('theme') === 'dark';
+    } catch (e) {}
+    if (isDark) {
+        document.body.classList.add('dark-mode');
+    }
+})();
     </script>
 </body>
 </html>
