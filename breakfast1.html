@@ -658,12 +658,84 @@ body.dark-mode .item-added {
     background: #23272b !important;
     color: #ffd700 !important;
 }
+
+.header-actions {
+    position: absolute;
+    right: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.history-btn {
+    background: var(--secondary-color);
+    color: var(--primary-color);
+    border: none;
+    border-radius: 10px;
+    padding: 0.7rem 1.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    font-weight: 700;
+    box-shadow: 0 2px 8px #0001;
+    transition: background 0.2s, color 0.2s;
+    outline: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.history-btn:hover {
+    background: #e8d9b5;
+    color: #1a3a6e;
+}
+.history-modal {
+    display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.4); align-items: center; justify-content: center;
+}
+.history-modal-content {
+    background: #fffbe6;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px #0003;
+    padding: 2rem 1.5rem;
+    max-width: 420px;
+    width: 95vw;
+    position: relative;
+    max-height: 80vh;
+    overflow-y: auto;
+    border: 2px solid var(--secondary-color);
+}
+.order-history-item {
+    background: #fff9e1;
+    border-radius: 10px;
+    margin-bottom: 1.1rem;
+    padding: 1rem 1rem 0.7rem 1rem;
+    box-shadow: 0 2px 8px #0001;
+    border: 1px solid #f7e6b2;
+}
+.reorder-btn {
+    background: var(--primary-color);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 0.4rem 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 0.7rem;
+    font-size: 0.98rem;
+}
+.reorder-btn:hover {
+    background: #122a52;
+}
     </style>
 </head>
 <body>
     <header>
-        <h1 class="uni-title">AMITY UNIVERSITY</h1>
-        <h2 class="system-title">BREAKFAST MENU</h2>
+        <div class="header-content" style="position:relative;">
+            <div class="uni-title">Amity University Cafeteria</div>
+            <div class="system-title">Breakfast Menu</div>
+            <div class="header-actions">
+                <button class="history-btn" onclick="openHistoryModal()"><i class="fas fa-history"></i> History</button>
+            </div>
+        </div>
     </header>
 
     <div class="main-container">
@@ -797,6 +869,15 @@ body.dark-mode .item-added {
     <div id="jumpingMan" class="jumping-man">🏃‍♂️</div>
     <div id="itemAdded" class="item-added">Item added to cart!</div>
 
+    <!-- Order History Modal -->
+    <div id="historyModal" class="history-modal">
+        <div class="history-modal-content">
+            <span class="history-close" onclick="closeHistoryModal()">&times;</span>
+            <h3>Order History</h3>
+            <div id="orderHistoryList" class="order-history-list"></div>
+        </div>
+    </div>
+
     <footer>
         <div class="social-icons">
             <a href="https://www.instagram.com/amityunibengaluru_official?igsh=aXcyY28zcm40NGlt"><i class="fab fa-instagram"></i></a>
@@ -926,22 +1007,15 @@ https://youtube.com/@amityuniversity3146?feature=shared"><i class="fab fa-youtub
 
         function processPayment() {
             const selectedMethod = document.querySelector('input[name="payment"]:checked');
-            
             if (!selectedMethod) {
                 showPaymentStatus('Please select a payment method', 'error');
                 return;
             }
-            
             const method = selectedMethod.value;
-            
-            // Show processing message
             showPaymentStatus('Processing payment...', 'pending');
-            
-            // Simulate payment processing with a delay
             setTimeout(() => {
                 let success = true;
                 let message = '';
-                
                 switch (method) {
                     case 'upi':
                         const upiId = document.getElementById('upiId').value.trim();
@@ -953,12 +1027,10 @@ https://youtube.com/@amityuniversity3146?feature=shared"><i class="fab fa-youtub
                             message = `Payment of Rs ${totalAmount} successful via UPI (${upiId})`;
                         }
                         break;
-                        
                     case 'card':
                         const cardNumber = document.getElementById('cardNumber').value.trim();
                         const expiry = document.getElementById('expiry').value.trim();
                         const cvv = document.getElementById('cvv').value.trim();
-                        
                         if (!cardNumber || cardNumber.replace(/\s/g, '').length !== 16) {
                             success = false;
                             message = 'Please enter a valid 16-digit card number';
@@ -974,25 +1046,25 @@ https://youtube.com/@amityuniversity3146?feature=shared"><i class="fab fa-youtub
                         }
                         break;
                 }
-                
                 if (success) {
                     paymentProcessed = true;
                     showPaymentStatus(message, 'success');
                     
-                    // Show thank you message after a short delay
+                    // Save order to history
+                    const order = {
+                        date: new Date().toLocaleString(),
+                        items: cart.map(({item, price}) => ({name: item, qty: 1, price})),
+                        total: totalAmount,
+                        payment: method === 'upi' ? `UPI (${document.getElementById('upiId').value.trim()})` : `Card (${document.getElementById('cardNumber').value.trim().slice(-4)})`
+                    };
+                    saveOrderToHistory(order);
                     setTimeout(() => {
                         document.getElementById("paymentSection").style.display = "none";
                         document.getElementById("payNowBtn").style.display = "block";
                         document.getElementById("payNowBtn").textContent = "Place New Order";
-                        
-                        // Prepare order summary
                         const orderSummary = cart.map(item => item.item).join(', ');
                         document.getElementById('orderItems').textContent = `Order: ${orderSummary}`;
-                        
-                        // Show thank you modal
                         document.getElementById('thankYouModal').style.display = 'flex';
-                        
-                        // Create party confetti effect
                         createConfetti();
                     }, 1500);
                 } else {
@@ -1114,6 +1186,47 @@ https://youtube.com/@amityuniversity3146?feature=shared"><i class="fab fa-youtub
         document.body.classList.add('dark-mode');
     }
 })();
+
+// Order history functionality
+let orderHistory = [];
+
+function openHistoryModal() {
+    const modal = document.getElementById('historyModal');
+    const list = document.getElementById('orderHistoryList');
+    let history = JSON.parse(localStorage.getItem('orderHistory') || '[]');
+    if (history.length === 0) {
+        list.innerHTML = '<div style="text-align:center;color:#888;">No orders yet.</div>';
+    } else {
+        list.innerHTML = history.map((order, idx) => `
+            <div class="order-history-item">
+                <div><b>Date:</b> ${order.date}</div>
+                <div><b>Items:</b> ${order.items.map(i => `${i.name} x${i.qty}`).join(', ')}</div>
+                <div><b>Total:</b> ₹${order.total}</div>
+                <div><b>Payment:</b> ${order.payment}</div>
+                <button class="reorder-btn" onclick="reorder(${idx})">Reorder</button>
+            </div>
+        `).join('');
+    }
+    modal.style.display = 'flex';
+}
+function closeHistoryModal() {
+    document.getElementById('historyModal').style.display = 'none';
+}
+function reorder(idx) {
+    let history = JSON.parse(localStorage.getItem('orderHistory') || '[]');
+    if (history[idx]) {
+        // Replace cart with previous order items
+        localStorage.setItem('cart', JSON.stringify(history[idx].items));
+        closeHistoryModal();
+        location.reload();
+    }
+}
+// Save order to history after payment (call this in your payment success logic):
+function saveOrderToHistory(order) {
+    let history = JSON.parse(localStorage.getItem('orderHistory') || '[]');
+    history.push(order);
+    localStorage.setItem('orderHistory', JSON.stringify(history));
+}
     </script>
 </body>
 </html>
