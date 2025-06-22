@@ -619,7 +619,7 @@
                         <th>Cart</th>
                     </tr>
                 </thead>                <tbody>                    <tr>
-                        <td><strong>Poha</strong></td>                        <td><img src="Poha.jpg" alt="Poha" class="food-img" width="200" height="200"></td>
+                        <td><strong>Poha</strong></td>                        <td><img src="images/Poha.jpg" alt="Poha" class="food-img" width="200" height="200"></td>
                         <td><strong>40</strong></td>
                         <td><button class="add-btn" onclick="addToCart('Poha', 40)">Add</button></td>
                     </tr>                    <tr>
@@ -730,6 +730,7 @@
             <p>Your breakfast is being prepared with care and will be ready soon.</p>
             <p id="orderItems" style="font-size: 0.9rem; color: var(--dark-text); font-style: italic;"></p>
             <button class="close-btn" onclick="closeThankYou()">Place New Order</button>
+            <button class="close-btn" onclick="goToHome()" style="margin-top:0.7rem;">Go Back to Home Page</button>
         </div>
     </div>
 
@@ -1013,6 +1014,10 @@
             document.getElementById('thankYouModal').style.display = 'none';
             resetOrder();
         }
+        
+        function goToHome() {
+    window.location.href = 'file:///C:/Users/anand/OneDrive/Desktop/Project%20Web%202025/index.html';
+}
         
         // Format card number with spaces after every 4 digits
         document.getElementById('cardNumber').addEventListener('input', function(e) {
