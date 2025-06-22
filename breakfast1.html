@@ -729,12 +729,12 @@ body.dark-mode .item-added {
 </head>
 <body>
     <header>
-        <div class="header-content" style="position:relative;">
-            <div class="uni-title">Amity University Cafeteria</div>
-            <div class="system-title">Breakfast Menu</div>
-            <div class="header-actions">
-                <button class="history-btn" onclick="openHistoryModal()"><i class="fas fa-history"></i> History</button>
+        <div class="header-content" style="position:relative; display: flex; align-items: center; justify-content: space-between;">
+            <div>
+                <div class="uni-title">Amity University Cafeteria</div>
+                <div class="system-title">Breakfast Menu</div>
             </div>
+            <button class="history-btn" id="historyBtn" onclick="openHistoryModal()"><i class="fas fa-history"></i> History</button>
         </div>
     </header>
 
@@ -872,9 +872,10 @@ body.dark-mode .item-added {
     <!-- Order History Modal -->
     <div id="historyModal" class="history-modal">
         <div class="history-modal-content">
-            <span class="history-close" onclick="closeHistoryModal()">&times;</span>
+            <span class="history-close" onclick="closeHistoryModal()" style="cursor:pointer;font-size:1.5rem;position:absolute;top:10px;right:18px;">&times;</span>
             <h3>Order History</h3>
             <div id="orderHistoryList" class="order-history-list"></div>
+            <button class="order-btn" id="cancelHistoryBtn" onclick="closeHistoryModal()" style="margin-top:1.2rem;width:100%;background:var(--error-color);color:#fff;font-weight:bold;font-size:1.1rem;">Cancel</button>
         </div>
     </div>
 
@@ -900,27 +901,20 @@ https://youtube.com/@amityuniversity3146?feature=shared"><i class="fab fa-youtub
         let paymentProcessed = false;
 
         function addToCart(item, price) {
-            // If payment already processed, start a new order
             if (paymentProcessed) {
                 resetOrder();
             }
-            
             cart.push({ item, price });
             totalAmount += price;
             updateCart();
-            
-            // Show animation
             showAddToCartAnimation();
-        }        function showAddToCartAnimation() {
+        }
+        function showAddToCartAnimation() {
             const itemAdded = document.getElementById('itemAdded');
-            
-            // Show item added message
             itemAdded.style.display = 'block';
             itemAdded.style.animation = 'none';
-            void itemAdded.offsetWidth; // Trigger reflow
+            void itemAdded.offsetWidth;
             itemAdded.style.animation = 'fadeInOut 2s ease-in-out';
-            
-            // Hide after animation
             setTimeout(() => {
                 itemAdded.style.display = 'none';
             }, 2000);
@@ -929,40 +923,32 @@ https://youtube.com/@amityuniversity3146?feature=shared"><i class="fab fa-youtub
         function updateCart() {
             const cartDiv = document.getElementById('cartItems');
             cartDiv.innerHTML = '';
-            
             if (cart.length === 0) {
                 cartDiv.innerHTML = '<p style="text-align: center; color: #666;">Your cart is empty</p>';
                 document.getElementById('total').textContent = 'Total: Rs 0';
                 return;
             }
-            
             cart.forEach(({ item, price }, index) => {
                 const itemDiv = document.createElement('div');
                 itemDiv.className = 'cart-item';
-                
                 const nameSpan = document.createElement('span');
                 nameSpan.className = 'cart-item-name';
                 nameSpan.textContent = item;
-                
                 const priceSpan = document.createElement('span');
                 priceSpan.className = 'cart-item-price';
                 priceSpan.textContent = `Rs ${price}`;
-                
                 const removeBtn = document.createElement('button');
                 removeBtn.className = 'remove-btn';
                 removeBtn.innerHTML = '&times;';
                 removeBtn.onclick = () => removeFromCart(index);
-                
                 itemDiv.appendChild(nameSpan);
                 itemDiv.appendChild(priceSpan);
                 itemDiv.appendChild(removeBtn);
-                
                 cartDiv.appendChild(itemDiv);
             });
-            
             document.getElementById('total').textContent = `Total: Rs ${totalAmount}`;
         }
-        
+
         function removeFromCart(index) {
             const item = cart[index];
             totalAmount -= item.price;
@@ -978,16 +964,13 @@ https://youtube.com/@amityuniversity3146?feature=shared"><i class="fab fa-youtub
             document.getElementById("paymentSection").style.display = "block";
             document.getElementById("payNowBtn").style.display = "none";
         }
-          function selectPaymentMethod(method) {
-            // First, reset all
+        function selectPaymentMethod(method) {
             document.querySelectorAll('.payment-method').forEach(div => {
                 div.classList.remove('selected');
             });
             document.querySelectorAll('.payment-details').forEach(div => {
                 div.style.display = 'none';
             });
-            
-            // Clear previous inputs
             if (method === 'upi') {
                 document.getElementById('cardNumber').value = '';
                 document.getElementById('expiry').value = '';
@@ -995,13 +978,9 @@ https://youtube.com/@amityuniversity3146?feature=shared"><i class="fab fa-youtub
             } else {
                 document.getElementById('upiId').value = '';
             }
-            
-            // Then select the chosen one
             document.getElementById(method).checked = true;
             document.getElementById(method).parentElement.classList.add('selected');
             document.getElementById(`${method}Details`).style.display = 'block';
-            
-            // Reset payment status
             document.getElementById('paymentStatus').style.display = 'none';
         }
 
@@ -1049,8 +1028,6 @@ https://youtube.com/@amityuniversity3146?feature=shared"><i class="fab fa-youtub
                 if (success) {
                     paymentProcessed = true;
                     showPaymentStatus(message, 'success');
-                    
-                    // Save order to history
                     const order = {
                         date: new Date().toLocaleString(),
                         items: cart.map(({item, price}) => ({name: item, qty: 1, price})),
@@ -1074,47 +1051,32 @@ https://youtube.com/@amityuniversity3146?feature=shared"><i class="fab fa-youtub
         }
 
         function createConfetti() {
-            // Number of confetti pieces
             const confettiCount = 100;
             const colors = ['#f39c12', '#e74c3c', '#3498db', '#2ecc71', '#9b59b6'];
-            
             for (let i = 0; i < confettiCount; i++) {
                 const confetti = document.createElement('div');
                 confetti.className = 'confetti';
-                
-                // Random position
                 confetti.style.left = Math.random() * 100 + 'vw';
-                
-                // Random color
                 confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                
-                // Random size
                 const size = Math.random() * 10 + 5;
                 confetti.style.width = size + 'px';
                 confetti.style.height = size + 'px';
-                
-                // Random rotation
                 confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
-                
-                // Random animation delay
                 confetti.style.animationDelay = Math.random() * 2 + 's';
-                
                 document.body.appendChild(confetti);
-                
-                // Remove confetti after animation
                 setTimeout(() => {
                     confetti.remove();
                 }, 5000);
             }
         }
-        
+
         function showPaymentStatus(message, type) {
             const statusDiv = document.getElementById('paymentStatus');
             statusDiv.textContent = message;
             statusDiv.className = 'payment-status ' + type;
             statusDiv.style.display = 'block';
         }
-        
+
         function resetOrder() {
             cart = [];
             totalAmount = 0;
@@ -1123,14 +1085,10 @@ https://youtube.com/@amityuniversity3146?feature=shared"><i class="fab fa-youtub
             document.getElementById('paymentStatus').style.display = 'none';
             document.getElementById('payNowBtn').textContent = 'Proceed to Payment';
             document.getElementById('payNowBtn').style.display = 'block';
-            
-            // Reset form fields
             document.getElementById('upiId').value = '';
             document.getElementById('cardNumber').value = '';
             document.getElementById('expiry').value = '';
             document.getElementById('cvv').value = '';
-            
-            // Unselect payment methods
             document.querySelectorAll('input[name="payment"]').forEach(input => {
                 input.checked = false;
             });
@@ -1141,31 +1099,28 @@ https://youtube.com/@amityuniversity3146?feature=shared"><i class="fab fa-youtub
                 div.style.display = 'none';
             });
         }
-        
+
         function closeThankYou() {
             document.getElementById('thankYouModal').style.display = 'none';
             resetOrder();
         }
-        
+
         function goToHome() {
-    window.location.href = 'https://pavaniba02.github.io/Cafeteria-Pre-Order-System/';
-}
-        
-        // Format card number with spaces after every 4 digits
+            window.location.href = 'https://pavaniba02.github.io/Cafeteria-Pre-Order-System/';
+        }
+
         document.getElementById('cardNumber').addEventListener('input', function(e) {
             let value = e.target.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
             if (value.length > 16) value = value.substr(0, 16);
             e.target.value = value.replace(/(.{4})/g, '$1 ').trim();
         });
-        
-         document.getElementById('expiry').addEventListener('input', function(e) {
+
+        document.getElementById('expiry').addEventListener('input', function(e) {
             let value = e.target.value.replace(/\D/g, '');
             if (value.length > 2) {
                 value = value.substring(0, 2) + '/' + value.substring(2, 4);
             }
             e.target.value = value;
-
-            // Validate month when user finishes typing
             if (value.length >= 2) {
                 let month = parseInt(value.substring(0, 2));
                 if (month < 1 || month > 12) {
@@ -1175,58 +1130,56 @@ https://youtube.com/@amityuniversity3146?feature=shared"><i class="fab fa-youtub
                 }
             }
         });
-        
+
         (function syncDarkMode() {
-    // Check localStorage or sessionStorage for dark mode preference
-    var isDark = false;
-    try {
-        isDark = localStorage.getItem('theme') === 'dark' || sessionStorage.getItem('theme') === 'dark';
-    } catch (e) {}
-    if (isDark) {
-        document.body.classList.add('dark-mode');
-    }
-})();
+            var isDark = false;
+            try {
+                isDark = localStorage.getItem('theme') === 'dark' || sessionStorage.getItem('theme') === 'dark';
+            } catch (e) {}
+            if (isDark) {
+                document.body.classList.add('dark-mode');
+            }
+        })();
 
-// Order history functionality
-let orderHistory = [];
+    // Order history functionality
+    let orderHistory = [];
 
-function openHistoryModal() {
-    const modal = document.getElementById('historyModal');
-    const list = document.getElementById('orderHistoryList');
-    let history = JSON.parse(localStorage.getItem('orderHistory') || '[]');
-    if (history.length === 0) {
-        list.innerHTML = '<div style="text-align:center;color:#888;">No orders yet.</div>';
-    } else {
-        list.innerHTML = history.map((order, idx) => `
-            <div class="order-history-item">
-                <div><b>Date:</b> ${order.date}</div>
-                <div><b>Items:</b> ${order.items.map(i => `${i.name} x${i.qty}`).join(', ')}</div>
-                <div><b>Total:</b> ₹${order.total}</div>
-                <div><b>Payment:</b> ${order.payment}</div>
-                <button class="reorder-btn" onclick="reorder(${idx})">Reorder</button>
-            </div>
-        `).join('');
+    function openHistoryModal() {
+        const modal = document.getElementById('historyModal');
+        const list = document.getElementById('orderHistoryList');
+        let history = JSON.parse(localStorage.getItem('orderHistory') || '[]');
+        if (history.length === 0) {
+            list.innerHTML = '<div style="text-align:center;color:#888;">No orders yet.</div>';
+        } else {
+            list.innerHTML = history.map((order, idx) => `
+                <div class=\"order-history-item\">\n                    <div><b>Date:</b> ${order.date}</div>\n                    <div><b>Items:</b> ${order.items.map(i => `${i.name} x${i.qty}`).join(', ')}</div>\n                    <div><b>Total:</b> ₹${order.total}</div>\n                    <div><b>Payment:</b> ${order.payment}</div>\n                    <button class=\"reorder-btn\" onclick=\"reorder(${idx})\">Reorder</button>\n                </div>
+            `).join('');
+        }
+        modal.style.display = 'flex';
     }
-    modal.style.display = 'flex';
-}
-function closeHistoryModal() {
-    document.getElementById('historyModal').style.display = 'none';
-}
-function reorder(idx) {
-    let history = JSON.parse(localStorage.getItem('orderHistory') || '[]');
-    if (history[idx]) {
-        // Replace cart with previous order items
-        localStorage.setItem('cart', JSON.stringify(history[idx].items));
-        closeHistoryModal();
-        location.reload();
+    function closeHistoryModal() {
+        document.getElementById('historyModal').style.display = 'none';
     }
-}
-// Save order to history after payment (call this in your payment success logic):
-function saveOrderToHistory(order) {
-    let history = JSON.parse(localStorage.getItem('orderHistory') || '[]');
-    history.push(order);
-    localStorage.setItem('orderHistory', JSON.stringify(history));
-}
+    function reorder(idx) {
+        let history = JSON.parse(localStorage.getItem('orderHistory') || '[]');
+        if (history[idx]) {
+            cart = history[idx].items.map(i => ({ item: i.name, price: i.price }));
+            totalAmount = cart.reduce((sum, item) => sum + item.price, 0);
+            paymentProcessed = false;
+            updateCart();
+            closeHistoryModal();
+            document.getElementById('paymentSection').style.display = 'block';
+            document.getElementById('payNowBtn').style.display = 'none';
+            setTimeout(function() {
+                document.getElementById('paymentSection').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 200);
+        }
+    }
+    function saveOrderToHistory(order) {
+        let history = JSON.parse(localStorage.getItem('orderHistory') || '[]');
+        history.push(order);
+        localStorage.setItem('orderHistory', JSON.stringify(history));
+    }
     </script>
 </body>
 </html>
