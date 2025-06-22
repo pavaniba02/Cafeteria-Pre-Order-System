@@ -1671,21 +1671,7 @@
                 setTimeout(() => {
                     if (document.getElementById('otpDisplay')) {
 
-                        document.getElementById('otpDisplay').textContent = 'OTP expired. Please request a new OTP.';
-                    }
-                }, 120000);
-            }, 1500);
-        };
-            otpDisplay.textContent = 'Your OTP: ' + generatedOtp + ' (valid for 2 minutes)';
-            addCoinsStep2.insertBefore(otpDisplay, addCoinsStep2.firstChild);
-            addCoinsMessage.textContent = 'OTP sent to ' + phone + '. Please enter the OTP below.';
-            setTimeout(() => {
-                addCoinsStep1.style.display = 'none';
-                addCoinsStep2.style.display = '';
-                addCoinsMessage.textContent = '';
-                // Remove OTP after 2 minutes
-                setTimeout(() => {
-                    if (document.getElementById('otpDisplay')) {
+
                         document.getElementById('otpDisplay').textContent = 'OTP expired. Please request a new OTP.';
                     }
                 }, 120000);
