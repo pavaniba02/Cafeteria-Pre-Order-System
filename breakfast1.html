@@ -827,20 +827,9 @@ body.dark-mode .item-added {
                     <input type="radio" name="payment" id="card" value="card"> 
                     <label for="card"><strong>Debit/Credit Card</strong></label>
                 </div>
-                
-                <div id="cardDetails" class="payment-details">
+                  <div id="cardDetails" class="payment-details">
                     <label for="cardNumber">Card Number:</label>
                     <input type="text" id="cardNumber" class="form-control" placeholder="1234 5678 9012 3456" maxlength="19">
-
-                <div class="payment-method" onclick="selectPaymentMethod('coins')">
-                    <input type="radio" name="payment" id="coins" value="coins"> 
-                    <label for="coins"><strong>Pay with Coins</strong></label>
-                </div>
-                  <div id="coinsDetails" class="payment-details">
-                    <p>Available Coins Balance: <span id="coinBalance">0</span> coins (1 coin = 1 rupee)</p>
-                    <p id="coinsError" style="color: var(--error-color); display: none;">Insufficient coins balance</p>
-                </div>
-                    
                     <div style="display: flex; gap: 10px; margin-top: 10px;">
                         <div style="flex: 1;">
                             <label for="expiry">Expiry (MM/YY):</label>
@@ -851,6 +840,21 @@ body.dark-mode .item-added {
                             <input type="password" id="cvv" class="form-control" placeholder="123" maxlength="3">
                         </div>
                     </div>
+                </div>
+
+                <div class="payment-method" onclick="selectPaymentMethod('coins')">
+                    <input type="radio" name="payment" id="coins" value="coins"> 
+                    <label for="coins"><strong>Pay with Coins</strong></label>
+                </div>
+                
+                <div id="coinsDetails" class="payment-details">
+                    <p>Available Coins Balance: <span id="coinBalance">0</span> coins (1 coin = 1 rupee)</p>
+                    <div id="coinPaymentConfirm" style="margin-top: 15px;">
+                        <p>Amount to be deducted: <strong><span id="coinsToDeduct">0</span> coins</strong></p>
+                        <p>Balance after payment: <strong><span id="remainingCoins">0</span> coins</strong></p>
+                        <button class="pay-btn" style="margin-top: 10px; background-color: var(--secondary-color);" onclick="confirmCoinPayment()">Pay with Coins</button>
+                    </div>
+                    <p id="coinsError" style="color: var(--error-color); display: none;">Insufficient coins balance</p>
                 </div>
                 
                 <button class="pay-btn" onclick="processPayment()">Confirm Payment</button>
@@ -970,8 +974,7 @@ https://youtube.com/@amityuniversity3146?feature=shared"><i class="fab fa-youtub
             document.getElementById("paymentSection").style.display = "block";
             document.getElementById("payNowBtn").style.display = "none";
             updateCoinsDisplay(); // Update the coins balance display
-        }
-        function selectPaymentMethod(method) {
+        }        function selectPaymentMethod(method) {
             document.querySelectorAll('.payment-method').forEach(div => {
                 div.classList.remove('selected');
             });
@@ -982,15 +985,22 @@ https://youtube.com/@amityuniversity3146?feature=shared"><i class="fab fa-youtub
                 document.getElementById('cardNumber').value = '';
                 document.getElementById('expiry').value = '';
                 document.getElementById('cvv').value = '';
-            } else {
+            } else if (method === 'card') {
                 document.getElementById('upiId').value = '';
             }
             document.getElementById(method).checked = true;
             document.getElementById(method).parentElement.classList.add('selected');
             document.getElementById(`${method}Details`).style.display = 'block';
             document.getElementById('paymentStatus').style.display = 'none';
-        }        // Load saved coins balance from localStorage
-        function loadCoinsBalance() {
+            
+            if (method === 'coins') {
+                document.getElementById('upiId').value = '';
+                document.getElementById('cardNumber').value = '';
+                document.getElementById('expiry').value = '';
+                document.getElementById('cvv').value = '';
+                updateCoinsPreview();
+            }
+        }        // Load saved coins balance from localStorage        function loadCoinsBalance() {
             return parseInt(localStorage.getItem('coinsBalance') || '1000'); // Default 1000 coins for testing
         }
 
@@ -1003,6 +1013,64 @@ https://youtube.com/@amityuniversity3146?feature=shared"><i class="fab fa-youtub
         // Save coins balance to localStorage
         function saveCoinsBalance(balance) {
             localStorage.setItem('coinsBalance', balance.toString());
+        }
+
+        // Update the coins preview when selecting coin payment
+        function updateCoinsPreview() {
+            const currentBalance = loadCoinsBalance();
+            const requiredCoins = totalAmount; // 1 coin = 1 rupee
+            const remaining = currentBalance - requiredCoins;
+            
+            document.getElementById('coinBalance').textContent = currentBalance;
+            document.getElementById('coinsToDeduct').textContent = requiredCoins;
+            document.getElementById('remainingCoins').textContent = remaining >= 0 ? remaining : 0;
+            
+            const errorElement = document.getElementById('coinsError');
+            const confirmElement = document.getElementById('coinPaymentConfirm');
+            
+            if (remaining < 0) {
+                errorElement.style.display = 'block';
+                errorElement.textContent = `Insufficient coins balance. Required: ${requiredCoins} coins, Available: ${currentBalance} coins`;
+                confirmElement.style.display = 'none';
+            } else {
+                errorElement.style.display = 'none';
+                confirmElement.style.display = 'block';
+            }
+        }
+
+        // Handle coin payment confirmation
+        function confirmCoinPayment() {
+            const currentBalance = loadCoinsBalance();
+            const requiredCoins = totalAmount;
+            
+            if (currentBalance >= requiredCoins) {
+                const newBalance = currentBalance - requiredCoins;
+                saveCoinsBalance(newBalance);
+                updateCoinsDisplay();
+                
+                const order = {
+                    date: new Date().toLocaleString(),
+                    items: cart.map(({item, price}) => ({name: item, qty: 1, price})),
+                    total: totalAmount,
+                    payment: `Coins (${requiredCoins} coins)`
+                };
+                saveOrderToHistory(order);
+                
+                showPaymentStatus(`Payment successful! ${requiredCoins} coins deducted. New balance: ${newBalance} coins`, 'success');
+                
+                setTimeout(() => {
+                    document.getElementById("paymentSection").style.display = "none";
+                    document.getElementById("payNowBtn").style.display = "block";
+                    document.getElementById("payNowBtn").textContent = "Place New Order";
+                    const orderSummary = cart.map(item => item.item).join(', ');
+                    document.getElementById('orderItems').textContent = `Order: ${orderSummary}`;
+                    document.getElementById('thankYouModal').style.display = 'flex';
+                    createConfetti();
+                    paymentProcessed = true;
+                }, 1500);
+            } else {
+                showPaymentStatus('Insufficient coins balance', 'error');
+            }
         }
 
         function processPayment() {
