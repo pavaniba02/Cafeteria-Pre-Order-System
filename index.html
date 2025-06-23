@@ -1083,7 +1083,6 @@
     </div>
 <!-- End Swiggy-like Profile Dropdown -->
 <div style="height:18px;"></div>
-<button class="about-cafe-btn" id="aboutCafeBtnHeader"><i class="fas fa-info-circle"></i> About Cafeteria</button>
     <!-- About Modal -->
     <div id="aboutModal" class="about-modal">
         <div class="modal-content">
@@ -1187,7 +1186,7 @@
     </div>
     
     <!-- Add Coins Modal -->
-    <div id="addCoinsModal" class="modal" style="display:none;position:fixed;z-index:9999;left:0top:0;width:100vw;height:100vh;background:rgba(0,0,0,0.4);align-items:center;justify-content:center;">
+    <div id="addCoinsModal" class="modal" style="display:none;position:fixed;z-index:9999;left:0;top:0;width:100vw;height:100vh;background:rgba(0,0,0,0.4);align-items:center;justify-content:center;">
       <div class="modal-content" style="background:#fff;padding:2rem 1.5rem;border-radius:12px;max-width:350px;width:90%;box-shadow:0 8px 32px #0005;position:relative;">
         <span class="close" id="closeAddCoinsModal" style="position:absolute;top:10px;right:18px;font-size:1.5rem;cursor:pointer;">&times;</span>
         <h3 style="margin-bottom:1rem;color:#f7b731;text-align:center;">Add Coins</h3>
@@ -1326,38 +1325,15 @@
 
         function capitalizeWords(str) {
             return str.replace(/\b\w/g, c => c.toUpperCase());
-        }        function addLoginBonus() {
-            const lastLoginDate = localStorage.getItem('lastLoginDate');
-            const today = new Date().toDateString();
-            
-            // Only give bonus if it's a new day or first login
-            if (lastLoginDate !== today) {
-                let currentCoins = parseInt(localStorage.getItem('profileCoins') || '0');
-                const bonusAmount = 20;
-                currentCoins += bonusAmount;
-                localStorage.setItem('profileCoins', currentCoins.toString());
-                localStorage.setItem('lastLoginDate', today);
-                return bonusAmount;
-            }
-            return 0;
         }
-
         function showMenuItems(name) {
             document.querySelector('.welcome-description').style.display = 'none';
             document.querySelector('.login-buttons').style.display = 'none';            document.querySelector('.menu-grid').style.display = 'grid';
-            // Add login bonus
-            const bonusAmount = addLoginBonus();
             // Remove old logout button, show nothing here
             const welcomeSection = document.querySelector('.welcome-section');
             welcomeSection.innerHTML = `
                 <h2>Welcome, ${name}!</h2>
                 <p>Please select from our menu options below</p>
-                ${bonusAmount > 0 ? `
-                <div style="margin-top: 15px; padding: 10px; background-color: #e8f5e9; border-radius: 8px; border: 1px solid #28a745; text-align: center; margin-bottom: 10px;">
-                    <i class="fas fa-gift" style="color: #28a745; margin-right: 8px;"></i>
-                    <span style="color: #1a3a6e; font-weight: bold;">Daily Login Bonus: ${bonusAmount} coins added to your account!</span>
-                </div>
-                ` : ''}
                 <div style="margin-top: 15px; padding: 10px; background-color: #fef9e7; border-radius: 8px; border: 1px solid #f7b731; text-align: center;">
                     <i class="fas fa-coins" style="color: #f7b731; margin-right: 8px;"></i>
                     <span style="color: #1a3a6e; font-weight: 600;">Add coins to your profile for exclusive rewards and faster checkouts!</span>
@@ -1653,21 +1629,11 @@
           document.getElementById('feedbackForm').reset();
         };
 
-        // --- Add Coins Modal Logic ---        let coins = parseInt(localStorage.getItem('profileCoins') || '0');
+        // --- Add Coins Modal Logic ---
+        let coins = parseInt(localStorage.getItem('profileCoins') || '0');
         const profileCoins = document.getElementById('profileCoins');
         function updateCoinsDisplay() {
             profileCoins.textContent = coins;
-            // Show add coins suggestion if balance is low
-            const coinsRow = document.getElementById('profileCoinsRow');
-            if (coinsRow && coins < 100) {
-                if (!document.getElementById('coinsMessage')) {
-                    const message = document.createElement('div');
-                    message.id = 'coinsMessage';
-                    message.style.cssText = 'font-size: 0.9rem; color: #f7b731; margin-top: 5px; font-style: italic;';
-                    message.innerHTML = '<i class="fas fa-info-circle"></i> Add coins for rewards and faster checkouts!';
-                    coinsRow.appendChild(message);
-                }
-            }
         }
         updateCoinsDisplay();
 
