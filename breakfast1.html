@@ -1140,23 +1140,32 @@ https://youtube.com/@amityuniversity3146?feature=shared"><i class="fab fa-youtub
                 document.getElementById('cvv').value = '';
                 updateCoinsPreview();
             }
-        }
-
-        function loadCoinsBalance() {
-            return parseInt(localStorage.getItem('coinsBalance') || '1000');
+        }        function loadCoinsBalance() {
+            // Use the same coin balance as the profile page
+            return parseInt(localStorage.getItem('profileCoins') || '0');
         }
 
         function updateCoinsDisplay() {
             const coinsBalance = loadCoinsBalance();
+            // Update the balance display in the payment section
             const element = document.getElementById('coinBalance');
             if (element) {
                 element.textContent = coinsBalance;
+            }
+            
+            // Also update the profile coins display if it exists
+            const profileCoins = document.getElementById('profileCoins');
+            if (profileCoins) {
+                profileCoins.textContent = coinsBalance;
             }
         }
 
         function saveCoinsBalance(balance) {
             if (typeof balance === 'number' && balance >= 0) {
-                localStorage.setItem('coinsBalance', balance.toString());
+                // Save to the same coin balance as the profile page
+                localStorage.setItem('profileCoins', balance.toString());
+                // Update displays after saving
+                updateCoinsDisplay();
             }
         }
 
