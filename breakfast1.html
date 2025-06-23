@@ -1433,13 +1433,42 @@ https://youtube.com/@amityuniversity3146?feature=shared"><i class="fab fa-youtub
             }
         })();
 
-        // Order history functionality
+        // Order history functionality        // Get current user's ID for history management
+        function getCurrentUserId() {
+            try {
+                const studentData = JSON.parse(localStorage.getItem('studentData'));
+                const adminData = JSON.parse(localStorage.getItem('adminData'));
+                if (studentData) {
+                    return 'student_' + studentData.phone; // Use phone as unique identifier
+                } else if (adminData) {
+                    return 'admin_' + adminData.phone;
+                }
+                return null;
+            } catch (error) {
+                console.error('Error getting current user:', error);
+                return null;
+            }
+        }
+
+        // Get history key for current user
+        function getUserHistoryKey() {
+            const userId = getCurrentUserId();
+            return userId ? `orderHistory_${userId}` : null;
+        }
+
         function openHistoryModal() {
             const modal = document.getElementById('historyModal');
             const list = document.getElementById('orderHistoryList');
+            const historyKey = getUserHistoryKey();
             
             try {
-                let history = JSON.parse(localStorage.getItem('orderHistory') || '[]');
+                if (!historyKey) {
+                    list.innerHTML = '<div style="text-align:center;color:#888;">Please log in to view your order history.</div>';
+                    modal.style.display = 'flex';
+                    return;
+                }
+
+                let history = JSON.parse(localStorage.getItem(historyKey) || '[]');
                 if (history.length === 0) {
                     list.innerHTML = '<div style="text-align:center;color:#888;">No orders yet.</div>';
                 } else {
@@ -1461,11 +1490,15 @@ https://youtube.com/@amityuniversity3146?feature=shared"><i class="fab fa-youtub
 
         function closeHistoryModal() {
             document.getElementById('historyModal').style.display = 'none';
-        }
+        }        function reorder(idx) {
+            const historyKey = getUserHistoryKey();
+            if (!historyKey) {
+                alert('Please log in to reorder items.');
+                return;
+            }
 
-        function reorder(idx) {
             try {
-                let history = JSON.parse(localStorage.getItem('orderHistory') || '[]');
+                let history = JSON.parse(localStorage.getItem(historyKey) || '[]');
                 if (history[idx]) {
                     cart = history[idx].items.map(i => ({ item: i.name, price: i.price }));
                     totalAmount = cart.reduce((sum, item) => sum + item.price, 0);
@@ -1480,14 +1513,25 @@ https://youtube.com/@amityuniversity3146?feature=shared"><i class="fab fa-youtub
                 }
             } catch (error) {
                 console.error('Error reordering:', error);
+                alert('Error reordering items. Please try again.');
             }
         }
 
         function saveOrderToHistory(order) {
+            const historyKey = getUserHistoryKey();
+            if (!historyKey) {
+                console.error('Cannot save order: No user logged in');
+                return;
+            }
+
             try {
-                let history = JSON.parse(localStorage.getItem('orderHistory') || '[]');
+                let history = JSON.parse(localStorage.getItem(historyKey) || '[]');
+                // Add user information to the order
+                const user = JSON.parse(localStorage.getItem('studentData')) || JSON.parse(localStorage.getItem('adminData'));
+                order.userName = user ? user.name : 'Unknown';
+                order.userType = user ? user.type : 'Unknown';
                 history.push(order);
-                localStorage.setItem('orderHistory', JSON.stringify(history));
+                localStorage.setItem(historyKey, JSON.stringify(history));
             } catch (error) {
                 console.error('Error saving order to history:', error);
             }
