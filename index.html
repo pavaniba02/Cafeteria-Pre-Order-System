@@ -24,6 +24,23 @@
   firebase.initializeApp(firebaseConfig);
   const auth = firebase.auth();
 </script>
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+
+<script>
+    /* Firebase Configuration */
+    const firebaseConfig = {
+        apiKey: "AIzaSyAgfM0Uue_X8oA-nw_U67kJvhQAeQHy17Y",
+        authDomain: "cafeteria-pre-order-system.firebaseapp.com",
+        projectId: "cafeteria-pre-order-system",
+        storageBucket: "cafeteria-pre-order-system.appspot.com",
+        messagingSenderId: "130713556065",
+        appId: "1:130713556065:web:0bf4ad1cab74a09bf04620"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+</script>
 
         :root {
             --primary-color: #2c3e50;
@@ -230,6 +247,19 @@
             cursor: pointer;
             transition: all 0.3s;
         }
+        .firebase-auth-section {
+    margin: 20px 0;
+    padding: 20px;
+    border-radius: 8px;
+    background: #f8f9fa;
+    display: none;
+}
+
+.verification-status {
+    color: #28a745;
+    font-size: 18px;
+    margin: 10px 0;
+}
 
         .submit-btn:hover {
             background-color: var(--accent-color);
@@ -259,6 +289,21 @@
 
         .notification.error {
             background-color: #e74c3c;
+        }
+
+        /* Firebase Authentication specific styles */
+        .firebase-auth-section {
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 8px;
+            background: #f8f9fa;
+            display: none;
+        }
+        
+        .verification-status {
+            color: #28a745;
+            font-size: 18px;
+            margin: 10px 0;
         }
 
         /* Main Content */
@@ -981,6 +1026,23 @@
     </style>
 </head>
 <body>
+<!-- Firebase Authentication UI -->
+<div id="firebaseAuthSection" class="firebase-auth-section">
+    <h2 style="text-align:center; color:var(--primary-color); margin-bottom:1rem;">Email Verification Required</h2>
+    <div class="form-group">
+        <input id="emailVerification" type="email" placeholder="yourname@s.amity.edu" class="form-control">
+    </div>
+    <div class="form-group">
+        <input id="passwordVerification" type="password" placeholder="Create a password" class="form-control">
+    </div>
+    <button onclick="registerAndSend()" class="submit-btn">Register & Verify Email</button>
+    <p id="verificationStatus" class="verification-status"></p>
+</div>
+
+<div id="verifiedSection" style="display:none">
+    <p style="font-size:24px;color:green;text-align:center;">✅ Email Verified!</p>
+    <button onclick="enterSite()" class="submit-btn">Continue to Cafeteria</button>
+</div>
         <header>
         <div class="header-content">
             <span class="amity-logo-fire-wrapper">
@@ -1235,6 +1297,8 @@
       </div>
     </div>
 
+    
+
     <main>
         <div class="welcome-section">
             <h2>Welcome to Our Cafeteria</h2>
@@ -1296,6 +1360,92 @@
         </div>
     </footer>
 
+    <!-- Firebase Scripts -->
+<script type="module">
+    // Firebase configuration and initialization
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendEmailVerification, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-auth.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyC9DFfu8a-anENHh4spS5PbJCXoUC6MhQc",
+        authDomain: "amity-cafeteria-ordering.firebaseapp.com",
+        projectId: "amity-cafeteria-ordering",
+        storageBucket: "amity-cafeteria-ordering.appspot.com",
+        messagingSenderId: "695302163579",
+        appId: "1:695302163579:web:f1e73ce5c8d290d6fe0110"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // Authentication state observer
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            if (user.emailVerified) {
+                document.getElementById('firebaseAuthSection').style.display = 'none';
+                document.getElementById('verifiedSection').style.display = 'block';
+                localStorage.setItem('userEmail', user.email);
+            }
+        } else {
+            document.getElementById('firebaseAuthSection').style.display = 'block';
+            document.getElementById('verifiedSection').style.display = 'none';
+            localStorage.removeItem('userEmail');
+        }
+    });
+
+    // Register and send verification email
+    window.registerAndSend = async function() {
+        const email = document.getElementById('emailVerification').value;
+        const password = document.getElementById('passwordVerification').value;
+        const statusElement = document.getElementById('verificationStatus');
+
+        if (!email.endsWith('@s.amity.edu')) {
+            statusElement.textContent = 'Please use an @s.amity.edu email address';
+            statusElement.style.color = 'red';
+            return;
+        }
+
+        try {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            await sendEmailVerification(userCredential.user);
+            statusElement.textContent = 'Verification email sent! Please check your inbox.';
+            statusElement.style.color = 'green';
+        } catch (error) {
+            if (error.code === 'auth/email-already-in-use') {
+                try {
+                    await signInWithEmailAndPassword(auth, email, password);
+                    if (!auth.currentUser.emailVerified) {
+                        await sendEmailVerification(auth.currentUser);
+                        statusElement.textContent = 'Verification email sent! Please check your inbox.';
+                        statusElement.style.color = 'green';
+                    }
+                } catch (signInError) {
+                    statusElement.textContent = 'Error: Invalid credentials';
+                    statusElement.style.color = 'red';
+                }
+            } else {
+                statusElement.textContent = 'Error: ' + error.message;
+                statusElement.style.color = 'red';
+            }
+        }
+    };
+
+    // Enter site after verification
+    window.enterSite = function() {
+        window.location.href = 'main.html';
+    };
+
+    // Logout function
+    window.logout = async function() {
+        try {
+            await signOut(auth);
+            localStorage.removeItem('userEmail');
+            window.location.href = 'index1.html';
+        } catch (error) {
+            console.error('Error signing out:', error);
+        }
+    };
+</script>
     <script>
         // Get modals and forms
         const studentModal = document.getElementById('studentModal');
@@ -1348,7 +1498,43 @@
                 notification.classList.remove('show');
             }, 3000);
         }
+// Firebase Authentication Functions
+function registerAndSend() {
+    const emailVal = document.getElementById('emailVerification').value.trim();
+    const passVal = document.getElementById('passwordVerification').value;
 
+    if (!emailVal.endsWith("@s.amity.edu")) {
+        showNotification("Only @s.amity.edu emails are allowed.", true);
+        return;
+    }
+
+    auth.createUserWithEmailAndPassword(emailVal, passVal)
+        .then(({user}) => {
+            user.sendEmailVerification({url: window.location.origin});
+            showNotification("Verification email sent! Please check your inbox.");
+            document.getElementById('verificationStatus').textContent = "Verification mail sent! Check your inbox.";
+        })
+        .catch(err => {
+            showNotification(err.message, true);
+            document.getElementById('verificationStatus').textContent = "Error: " + err.message;
+        });
+}
+
+// Monitor auth state
+auth.onAuthStateChanged(user => {
+    if (user && user.emailVerified) {
+        document.getElementById('verifiedSection').style.display = "block";
+        document.getElementById('firebaseAuthSection').style.display = "none";
+        showNotification("Email verified successfully!");
+        showMenuItems(user.displayName || "Verified User");
+    }
+});
+
+function enterSite() {
+    document.getElementById('verifiedSection').style.display = "none";
+    document.querySelector('.menu-grid').style.display = "grid";
+    document.getElementById('firebaseAuthSection').style.display = "none";
+}
         function capitalizeWords(str) {
             return str.replace(/\b\w/g, c => c.toUpperCase());
         }
@@ -1391,10 +1577,15 @@
         }
 
         function logout() {
-            localStorage.removeItem('studentData');
-            localStorage.removeItem('adminData');
-            location.reload();
-        }
+    auth.signOut().then(() => {
+        localStorage.removeItem('studentData');
+        localStorage.removeItem('adminData');
+        localStorage.removeItem('profileCoins');
+        location.reload();
+    }).catch(err => {
+        showNotification("Error during logout: " + err.message, true);
+    });
+}
 
         // Close modal events
         studentCloseBtn.onclick = () => studentModal.style.display = 'none';
@@ -1571,67 +1762,77 @@
           loadProfileData();
           const savedTheme = localStorage.getItem('theme') || 'light';
           setTheme(savedTheme);
-          // Check if user is already logged in when page loads
-          const studentData = JSON.parse(localStorage.getItem('studentData'));
-          const adminData = JSON.parse(localStorage.getItem('adminData'));
-          
-          if (studentData || adminData) {
-              const userData = studentData || adminData;
-              showMenuItems(userData.name);
+
+          // Check if user needs to verify email
+          const user = auth.currentUser;
+          if (!user || !user.emailVerified) {
+              document.getElementById('firebaseAuthSection').style.display = "block";
+          } else {
+              // Check if user is already logged in
+              const studentData = JSON.parse(localStorage.getItem('studentData'));
+              const adminData = JSON.parse(localStorage.getItem('adminData'));
+              
+              if (studentData || adminData) {
+                  const userData = studentData || adminData;
+                  showMenuItems(userData.name);
+              }
+          }
+
+          // Initialize UI elements
+          const modal = document.getElementById("myModal");
+          const modalImg = document.getElementById("img01");
+          const span = document.getElementsByClassName("close")[0];
+
+          // Modal event listeners
+          if (span) {
+              span.onclick = function() {
+                  modal.style.display = "none";
+              }
+          }
+
+          window.onclick = function(event) {
+              if (event.target == modal) {
+                  modal.style.display = "none";
+              }
+          }
+
+          // Image click handlers
+          const images = document.getElementsByClassName("menu-img");
+          for (let img of images) {
+              img.onclick = function() {
+                  modal.style.display = "block";
+                  modalImg.src = this.src;
+              }
           }
         };
 
-        // Feedback and settings (demo)
-        document.getElementById('sendFeedbackBtn').onclick = function() {
-          alert('Feedback form coming soon!');
-        };
-        document.getElementById('settingsBtn').onclick = function() {
-          alert('Settings page coming soon!');
-        };
-
-        // About Cafeteria button in header
-        document.getElementById('aboutCafeBtnHeader').onclick = function() {
-            openAboutCafeModal();
+        // Additional Firebase-related functions
+        function enterSite() {
+            document.getElementById('verifiedSection').style.display = "none";
+            document.querySelector('.menu-grid').style.display = "grid";
+            document.getElementById('firebaseAuthSection').style.display = "none";
         }
 
-        // About Cafeteria Modal logic for header button
-        var aboutCafeBtnHeader = document.getElementById('aboutCafeBtnHeader');
-        var aboutCafeModalHeader = document.getElementById('aboutCafeModal');
-        var closeAboutCafeModalHeader = document.getElementById('closeAboutCafeModal');
-        var closeAboutCafeBtnHeader = document.getElementById('closeAboutCafeBtn');
+        // Firebase Authentication Functions
+        function registerAndSend() {
+            const emailVal = document.getElementById('emailVerification').value.trim();
+            const passVal = document.getElementById('passwordVerification').value;
 
-        aboutCafeBtnHeader.onclick = function() {
-            aboutCafeModalHeader.style.display = 'block';
-        };
-        closeAboutCafeModalHeader.onclick = closeAboutCafeBtnHeader.onclick = function() {
-            aboutCafeModalHeader.style.display = 'none';
-        }
-
-        // Profile icon dropdown logic
-        const profileLogoutBtn = document.getElementById('profileLogoutBtn');
-        let profileDropdownOpen = false;
-        profileIconBtn.onclick = function(e) {
-            e.stopPropagation();
-            profileDropdown.style.display = profileDropdownOpen ? 'none' : 'block';
-            profileDropdownOpen = !profileDropdownOpen;
-        };        profileLogoutBtn.onclick = function() {
-            localStorage.removeItem('studentData');
-            localStorage.removeItem('adminData');
-            localStorage.removeItem('profileCoins'); // Reset coins on logout
-            location.reload();
-        };
-        // Hide dropdown on outside click
-        document.addEventListener('click', function(e) {
-            if (profileDropdownOpen && !profileDropdown.contains(e.target) && e.target !== profileIconBtn) {
-                profileDropdown.style.display = 'none';
-                profileDropdownOpen = false;
+            if (!emailVal.endsWith("@s.amity.edu")) {
+                showNotification("Only @s.amity.edu emails are allowed.", true);
+                return;
             }
-        });
-        // Hide on resize
-        window.addEventListener('resize', function() {
-            profileDropdown.style.display = 'none';
-            profileDropdownOpen = false;
-        });
+
+            auth.createUserWithEmailAndPassword(emailVal, passVal)
+                .then(({user}) => {
+                    user.sendEmailVerification({url: window.location.origin});
+                    showNotification("Verification email sent! Please check your inbox.");
+                    document.getElementById('verificationStatus').textContent = "Verification mail sent! Check your inbox.";
+                })
+                .catch(err => {
+                    showNotification(err.message, true);
+                    document.getElementById('verificationStatus').textContent = "Error: " + err.message;
+                });
 
         // Feedback modal logic
         const feedbackModal = document.getElementById('feedbackModal');
@@ -1711,6 +1912,53 @@
                     }
                 }, 120000);
             }, 1500);
+        };
+        window.onload = function() {
+    loadProfileData();
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    setTheme(savedTheme);
+
+    // Check if user needs to verify email
+    const user = auth.currentUser;
+    if (!user || !user.emailVerified) {
+        document.getElementById('firebaseAuthSection').style.display = "block";
+    } else {
+        // Check if user is already logged in
+        const studentData = JSON.parse(localStorage.getItem('studentData'));
+        const adminData = JSON.parse(localStorage.getItem('adminData'));
+        
+        if (studentData || adminData) {
+            const userData = studentData || adminData;
+            showMenuItems(userData.name);
+        }
+    }
+
+    // Initialize UI elements
+    const modal = document.getElementById("myModal");
+    const modalImg = document.getElementById("img01");
+    const span = document.getElementsByClassName("close")[0];
+
+    // Modal event listeners
+    if (span) {
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
+    // Image click handlers
+    const images = document.getElementsByClassName("menu-img");
+    for (let img of images) {
+        img.onclick = function() {
+            modal.style.display = "block";
+            modalImg.src = this.src;
+        }
+    }
         };
         verifyOtpBtn.onclick = function() {
             const otp = document.getElementById('addCoinsOtp').value.trim();
