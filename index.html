@@ -1409,6 +1409,13 @@
             const name = document.getElementById('studentName').value;
             const phone = document.getElementById('studentPhone').value;
             const email = document.getElementById('studentEmail').value;
+
+            // Validate student email domain
+            if (!email.endsWith('@s.amity.edu')) {
+                showNotification('Please use your Amity student email (@s.amity.edu)', true);
+                return;
+            }
+
             localStorage.setItem('studentData', JSON.stringify({
                 name: name,
                 phone: phone,
