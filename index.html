@@ -7,6 +7,24 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
     <style>
+        <!-- Firebase SDKs (compat builds) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+
+<script>
+  /* Your real project keys */
+  const firebaseConfig = {
+    apiKey: "AIzaSyAgfM0Uue_X8oA-nw_U67kJvhQAeQHy17Y",
+    authDomain: "cafeteria-pre-order-system.firebaseapp.com",
+    projectId: "cafeteria-pre-order-system",
+    storageBucket: "cafeteria-pre-order-system.appspot.com",
+    messagingSenderId: "130713556065",
+    appId: "1:130713556065:web:0bf4ad1cab74a09bf04620"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+</script>
+
         :root {
             --primary-color: #2c3e50;
             --secondary-color: #f39c12;
@@ -963,7 +981,7 @@
     </style>
 </head>
 <body>
-    <header>
+        <header>
         <div class="header-content">
             <span class="amity-logo-fire-wrapper">
                 <img src="logo.png" alt="Amity University Logo" class="amity-logo">
