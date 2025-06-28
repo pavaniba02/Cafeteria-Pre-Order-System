@@ -7,41 +7,6 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
     <style>
-        <!-- Firebase SDKs (compat builds) -->
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-
-<script>
-  /* Your real project keys */
-  const firebaseConfig = {
-    apiKey: "AIzaSyAgfM0Uue_X8oA-nw_U67kJvhQAeQHy17Y",
-    authDomain: "cafeteria-pre-order-system.firebaseapp.com",
-    projectId: "cafeteria-pre-order-system",
-    storageBucket: "cafeteria-pre-order-system.appspot.com",
-    messagingSenderId: "130713556065",
-    appId: "1:130713556065:web:0bf4ad1cab74a09bf04620"
-  };
-  firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
-</script>
-<!-- Firebase SDKs -->
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-
-<script>
-    /* Firebase Configuration */
-    const firebaseConfig = {
-        apiKey: "AIzaSyAgfM0Uue_X8oA-nw_U67kJvhQAeQHy17Y",
-        authDomain: "cafeteria-pre-order-system.firebaseapp.com",
-        projectId: "cafeteria-pre-order-system",
-        storageBucket: "cafeteria-pre-order-system.appspot.com",
-        messagingSenderId: "130713556065",
-        appId: "1:130713556065:web:0bf4ad1cab74a09bf04620"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-</script>
-
         :root {
             --primary-color: #2c3e50;
             --secondary-color: #f39c12;
@@ -66,8 +31,10 @@
             min-height: 100vh;
             color: var(--dark-text);
             line-height: 1.6;
-        }        header {
-            background: var(--primary-color); /* Match footer color */
+        }
+
+        header {
+            background: var(--primary-color);
             padding: 2rem;
             position: relative;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
@@ -83,6 +50,7 @@
             padding: 0 2rem;
             position: relative;
         }
+
         .amity-logo {
             height: 140px;
             width: 140px;
@@ -99,81 +67,59 @@
             position: relative;
             z-index: 2;
         }
-        .amity-logo-fire-wrapper {
-            border: none !important;
-            border-radius: 0 !important;
-            box-shadow: none !important;
-            background: none !important;
-            width: auto;
-            height: auto;
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-        }
-        .amity-logo-fire {
-            display: none !important;
-        }
-        .amity-logo {
-            display: block;
-            width: 140px;
-            height: 140px;
-            border-radius: 18px;
-            border: none;
-            box-shadow: none;
-            margin: 0;
-            background: none;
-            object-fit: cover;
-        }
+
         .header-titles {
             position: absolute;
             left: 50%;
             top: 50%;
             transform: translate(-50%, -50%);
+            z-index: 1;
             text-align: center;
-            width: 60%;
-            z-index: 2;
+            width: 100%;
+            margin: 0 auto;
         }
+
         .uni-title {
-            font-family: Arial, 'Poppins', 'Inter', 'Segoe UI', sans-serif;
-            color: #f7b731 !important;
-            font-size: 2.7rem;
+            color: var(--light-text);
+            font-size: 2.2rem;
             font-weight: 700;
-            letter-spacing: 2px;
-            margin-bottom: 0.2rem;
-            /* Removed sparkling effect */
-            /* text-shadow: 2px 2px 8px #2228, 0 2px 10px #fff8; */
-        }
-        .system-title {
-            font-family: Arial, 'Inter', 'Poppins', 'Segoe UI', sans-serif;
-            color: #fff !important;
-            font-size: 1.5rem;
-            font-weight: 600;
+            margin-bottom: 0.3rem;
+            font-family: 'Poppins', sans-serif;
             letter-spacing: 1.5px;
-            opacity: 1;
-            text-shadow: 1px 1px 6px #1976d288;
         }
-        .about-cafe-btn {
-            position: absolute;
-            right: 2rem;
-            top: 50%;
-            transform: translateY(-50%);
-            background: #f7b731 !important;
-            color: #1976d2 !important;
-            border: none !important;
-            font-weight: 600;
-            box-shadow: none !important;
-            transition: none !important;
-            padding: 0.6rem 1.2rem;
-            font-size: 1rem;
+
+        .system-title {
+            color: #bdc3c7;
+            font-size: 1.3rem;
+            font-weight: 400;
+            margin-bottom: 0;
+        }
+
+        /* Firebase Authentication styles */
+        .firebase-auth-section {
+            margin: 20px auto;
+            padding: 20px;
             border-radius: 8px;
+            background: #f8f9fa;
+            max-width: 400px;
+            display: none;
         }
-        .about-cafe-btn:hover {
-            background: #f7b731 !important;
-            color: #1976d2 !important;
-            border: none !important;
+
+        .form-control {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            margin-bottom: 1rem;
         }
-        /* Rest of your CSS remains the same */
-        /* Modal styles */
+
+        .verification-status {
+            margin: 10px 0;
+            text-align: center;
+        }
+
+        /* Modal Styles */
         .modal {
             display: none;
             position: fixed;
@@ -182,19 +128,18 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            overflow-y: auto;
+            background-color: rgba(0,0,0,0.5);
         }
 
         .modal-content {
-            background-color: var(--card-bg);
+            background-color: #fefefe;
             margin: 5% auto;
-            padding: 2rem;
+            padding: 30px;
             border-radius: 12px;
             width: 90%;
-            max-width: 400px;
+            max-width: 500px;
             position: relative;
-            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
         }
 
         .close {
@@ -222,7 +167,7 @@
             font-weight: 500;
         }
 
-        .form-group input {
+        .form-group input, .form-group select {
             width: 100%;
             padding: 0.8rem;
             border: 1px solid #ddd;
@@ -247,19 +192,6 @@
             cursor: pointer;
             transition: all 0.3s;
         }
-        .firebase-auth-section {
-    margin: 20px 0;
-    padding: 20px;
-    border-radius: 8px;
-    background: #f8f9fa;
-    display: none;
-}
-
-.verification-status {
-    color: #28a745;
-    font-size: 18px;
-    margin: 10px 0;
-}
 
         .submit-btn:hover {
             background-color: var(--accent-color);
@@ -291,21 +223,6 @@
             background-color: #e74c3c;
         }
 
-        /* Firebase Authentication specific styles */
-        .firebase-auth-section {
-            margin: 20px 0;
-            padding: 20px;
-            border-radius: 8px;
-            background: #f8f9fa;
-            display: none;
-        }
-        
-        .verification-status {
-            color: #28a745;
-            font-size: 18px;
-            margin: 10px 0;
-        }
-
         /* Main Content */
         main {
             padding: 2.5rem 1rem;
@@ -332,7 +249,7 @@
             font-weight: 600;
         }
 
-        .welcome-section p {
+        .welcome-description {
             font-size: 1.1rem;
             color: #6c757d;
             max-width: 700px;
@@ -379,36 +296,12 @@
             background-color: #34495e;
         }
 
-        .logout-btn {
-            display: block;
-            margin: 1rem auto 0;
-            padding: 8px 25px;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .logout-btn:hover {
-            background-color: #34495e;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-        
         /* Menu Cards */
         .menu-grid {
-            position: relative;
-            z-index: 2;
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 2rem;
             margin-top: 2rem;
-            position: relative;
-            z-index: 1;
         }
 
         .menu-card {
@@ -419,146 +312,89 @@
             transition: all 0.3s ease;
             text-decoration: none;
             color: inherit;
-            border: 1px solid #e9ecef;
+            position: relative;
         }
 
         .menu-card:hover {
             transform: translateY(-8px);
             box-shadow: 0 12px 35px var(--shadow-medium);
-            text-decoration: none;
-            color: inherit;
         }
 
         .card-image {
             height: 200px;
-            background-size: cover;
-            background-position: center;
+            background: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
             position: relative;
-            overflow: hidden;
-        }
-
-        .card-image::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(45deg, rgba(0,0,0,0.3), rgba(0,0,0,0.1));
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .card-icon {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 3rem;
+            font-size: 4rem;
             color: white;
-            z-index: 2;
+            opacity: 0.9;
         }
 
         .card-content {
-            padding: 1.8rem;
+            padding: 1.5rem;
         }
 
         .card-title {
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             font-weight: 600;
             color: var(--primary-color);
             margin-bottom: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            font-family: 'Poppins', sans-serif;
         }
 
         .card-description {
             color: #6c757d;
-            font-size: 0.95rem;
-            margin-bottom: 1.2rem;
             line-height: 1.6;
+            margin-bottom: 1rem;
         }
 
         .card-time {
-            display: inline-block;
-            background: #f8f9fa;
-            color: var(--primary-color);
+            background: var(--light-bg);
+            color: var(--secondary-color);
             padding: 0.4rem 0.8rem;
             border-radius: 20px;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             font-weight: 500;
-            border: 1px solid #e9ecef;
-        }
-
-        /* Individual card styles */
-        .breakfast-card .card-image {
-            background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url('coffee and rusk.jpeg');
-            background-size: cover;
-            background-position: center;
-        }
-        
-        .lunch-card .card-image {
-            background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url('Paneer butter masala.jpeg');
-            background-size: cover;
-            background-position: center;
-        }
-
-        .snacks-card .card-image {
-            background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url('Dhai puri.jpeg');
-            background-size: cover;
-            background-position: center;
-        }
-
-        /* Accent colors for cards */
-        .breakfast-card:hover .card-title {
-            color: #f39c12;
-        }
-
-        .lunch-card:hover .card-title {
-            color: #e74c3c;
-        }
-
-        .snacks-card:hover .card-title {
-            color: #3498db;
+            display: inline-block;
         }
 
         /* Footer */
         footer {
             background: var(--primary-color);
-            padding: 2rem;
+            color: var(--light-text);
             text-align: center;
+            padding: 2rem 1rem;
             margin-top: 3rem;
-            position: relative;
-            z-index: 1;
         }
 
         .footer-content {
-            max-width: 800px;
+            max-width: 1200px;
             margin: 0 auto;
         }
 
         .social-links {
             display: flex;
             justify-content: center;
-            gap: 1.5rem;
-            margin-bottom: 1.5rem;
+            gap: 1rem;
+            margin-bottom: 1rem;
         }
 
         .social-links a {
-            color: var(--secondary-color);
+            color: var(--light-text);
             font-size: 1.5rem;
-            transition: all 0.3s ease;
-            padding: 0.5rem;
+            transition: color 0.3s;
         }
 
         .social-links a:hover {
-            color: var(--light-text);
-            transform: translateY(-2px);
+            color: var(--secondary-color);
         }
 
         .footer-text {
-            color: var(--light-text);
-            font-size: 0.9rem;
-            opacity: 0.8;
             margin-bottom: 0.5rem;
         }
 
@@ -571,19 +407,19 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            overflow-y: auto;
+            background-color: rgba(0,0,0,0.5);
         }
 
         .about-modal-content {
-            background-color: var(--card-bg);
-            margin: 5% auto;
-            padding: 2.5rem;
+            background-color: #fefefe;
+            margin: 3% auto;
+            padding: 2rem;
             border-radius: 12px;
             width: 90%;
             max-width: 800px;
+            max-height: 85vh;
+            overflow-y: auto;
             position: relative;
-            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
         }
 
         .about-modal-content h2 {
@@ -595,8 +431,7 @@
 
         .about-section {
             margin-bottom: 2rem;
-            padding: 1rem;
-            border-radius: 8px;
+            padding: 1.5rem;
             background-color: #f8f9fa;
         }
 
@@ -610,506 +445,88 @@
             color: #6c757d;
             line-height: 1.8;
             margin-bottom: 1rem;
-        }        @media (max-width: 768px) {
-            .header-titles {
-                width: 80%;
-            }
-            .amity-logo {
-                width: 140px;
-                height: 140px;
-            }
-        }
-        @media (max-width: 480px) {
-            .header-content {
-                flex-direction: column;
-                align-items: flex-start;
-                padding: 1rem 0.5rem;
-            }
-            .header-titles {
-                position: static;
-                transform: none;
-                width: 100%;
-                margin: 0.5rem 0 0.5rem 0;
-                text-align: center;
-            }
-            .about-cafe-btn {
-                position: static;
-                transform: none;
-                margin: 0.5rem 0 0 0;
-                width: 100%;
-            }
-            .amity-logo {
-                width: 100px;
-                height: 100px;
-            }
-        }
-        @media (max-width: 700px) {
-  .header-content {
-    flex-direction: column;
-    align-items: center;
-    padding: 1.2rem 0.5rem !important;
-    gap: 0.7rem;
-  }
-  .amity-logo {
-    width: 90px !important;
-    height: 90px !important;
-    margin: 0 auto 0.5rem auto !important;
-    display: block;
-  }
-  .header-titles {
-    position: static !important;
-    transform: none !important;
-    width: 100% !important;
-    margin: 0.2rem 0 0.2rem 0 !important;
-    text-align: center !important;
-    z-index: 1;
-  }
-  .uni-title {
-    font-size: 1.3rem !important;
-    margin-bottom: 0.1rem !important;
-    letter-spacing: 1px !important;
-  }
-  .system-title {
-    font-size: 1rem !important;
-    margin-bottom: 0.2rem !important;
-  }
-  .header-actions {
-    flex-direction: row !important;
-    align-items: center !important;
-    justify-content: center !important;
-    width: 100% !important;
-    gap: 0.7rem !important;
-    position: static !important;
-    margin: 0.2rem 0 0.2rem 0 !important;
-  }
-  .header-profile {
-    margin-bottom: 0 !important;
-    margin-right: 0.5rem !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-  }
-  .profile-icon-btn, #profileAvatarImg {
-    width: 48px !important;
-    height: 48px !important;
-  }
-  .about-cafe-btn {
-    font-size: 0.98rem !important;
-    padding: 0.5rem 0.8rem !important;
-    width: auto !important;
-    margin: 0 !important;
-  }
-}
-        /* 1. About Cafeteria Modal Title in Blue */
-        #aboutCafeModal h2 {
-            color: var(--primary-color) !important;
-            text-shadow: 1px 1px 8px #fff8, 0 2px 10px #1976d288;
         }
 
-        /* 2. Add white border to fire logo */
-        .amity-logo-fire-wrapper {
-            border: 4px solid #fff;
-            border-radius: 50%;
-            box-shadow: 0 0 0 4px #fff, 0 4px 24px #0002;
-            background: none;
-        }
-
-        /* 3. Cafeteria button: white background, blue text, mustard border, bold, white shadow */
+        /* About Cafeteria Button */
         .about-cafe-btn {
             background: #fff !important;
             color: var(--primary-color) !important;
             border: 2px solid #f7b731 !important;
             font-weight: 700;
-            box-shadow: 0 2px 12px #fff6;
+            padding: 0.7rem 1.2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: absolute;
+            right: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
         }
+
         .about-cafe-btn:hover {
             background: #f7b731 !important;
             color: #2c3e50 !important;
-            border-color: #f7b731 !important;
         }
 
-        .header-actions {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            position: absolute;
-            right: 2.5rem;
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: 10;
-            gap: 1.2rem;
-        }
-        .header-profile {
-            position: static;
-            margin-bottom: 0.3rem;
-        }
-        .about-cafe-btn {
-            position: static;
-            margin-top: 0;
-            margin-bottom: 0;
-            width: auto;
-        }
-        @media (max-width: 600px) {
-            .header-actions {
-                right: 1rem;
-                gap: 0.4rem;
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                padding: 1rem;
             }
-        }
-
-        /* Profile Dropdown */
-        .profile-dropdown {
-            display: none;
-            position: absolute;
-            top: 120%;
-            right: 0;
-            min-width: 270px;
-            background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 6px 24px #0002;
-            padding: 1.5rem 1.5rem 1.2rem 1.5rem;
-            z-index: 100;
-            font-size: 1rem;
-            color: #222;
-            font-family: 'Inter', 'Poppins', Arial, sans-serif;
-            align-items: center;
-            min-width: 320px;
-            padding-top: 2.2rem;
-        }
-        .profile-title {
-            font-size: 2rem !important;
-            font-family: 'Poppins', Arial, sans-serif !important;
-            font-weight: 700;
-            color: #1976d2;
-            margin-bottom: 1.2rem;
-            text-align: center;
-            letter-spacing: 0.5px;
-        }
-        .profile-detail-row {
-            display: flex;
-            align-items: center;
-            margin-bottom: 0.5rem;
-            gap: 0.5rem;
-        }
-        .profile-label {
-            min-width: 110px;
-            color: #888;
-            font-weight: 500;
-            font-size: 0.98rem;
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-        }
-        .profile-value {
-            color: #222;
-            font-weight: 500;
-            font-size: 1rem;
-            word-break: break-all;
-        }
-        .profile-logout-btn {
-            margin-top: 1.1rem;
-            width: 100%;
-            background: #f7b731;
-            color: #1976d2;
-            border: none;
-            border-radius: 8px;
-            padding: 0.7rem 0;
-            font-weight: 700;
-            font-size: 1.05rem;
-            cursor: pointer;
-            transition: background 0.2s;
-            box-shadow: 0 2px 8px #f7b73133;
-        }
-        .profile-logout-btn:hover {
-            background: #ffe082;
-        }
-        @media (max-width: 600px) {
-            .profile-dropdown {
-                min-width: 220px;
-                padding: 1.2rem 0.7rem 0.7rem 0.7rem;
+            
+            .header-titles {
+                position: static;
+                transform: none;
+                margin: 1rem 0;
             }
-            .profile-title {
-                font-size: 1.3rem !important;
+            
+            .about-cafe-btn {
+                position: static;
+                transform: none;
+                margin-top: 1rem;
             }
-            .profile-icon-btn, #profileAvatarImg {
-                width: 70px !important;
-                height: 70px !important;
+            
+            .login-buttons {
+                flex-direction: column;
+                align-items: center;
             }
-        }
-
-        /* Profile icon button styles */
-        .profile-icon-btn {
-            width: 100px;
-            height: 100px;
-            margin: 0 auto 0.7rem auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            box-shadow: 0 4px 16px #1976d233;
-            background: none;
-            border: none;
-            outline: none;
-            cursor: pointer;
-            padding: 0;
-            transition: background 0.2s;
-        }
-        #profileAvatar {
-            width: 100px;
-            height: 100px;
-            display: block;
-        }
-
-        /* Swiggy-like Profile Styles */
-        .profile-dropdown { min-width: 340px; max-width: 95vw; }
-        .profile-title { font-size: 2rem; font-family: 'Poppins', Arial, sans-serif; font-weight: 700; color: #1976d2; margin-bottom: 1.2rem; text-align: center; letter-spacing: 0.5px; }
-        .profile-detail-row { display: flex; align-items: center; margin-bottom: 0.5rem; gap: 0.5rem; }
-        .profile-label { min-width: 110px; color: #888; font-weight: 500; font-size: 0.98rem; display: flex; align-items: center; gap: 0.3rem; }
-        .profile-value { color: #222; font-weight: 500; font-size: 1rem; word-break: break-all; }
-        .profile-edit-input { flex:1; padding:0.3rem 0.5rem; border-radius:6px; border:1px solid #ccc; font-size:1rem; }
-        .profile-edit-btn, .profile-save-btn, .profile-cancel-btn { width:100%; background:#1976d2; color:#fff; border:none; border-radius:8px; padding:0.5rem 0; font-weight:600; font-size:1rem; cursor:pointer; margin-top:0.7rem; transition:background 0.2s; }
-        .profile-edit-btn { background:#1976d2; color:#fff; }
-        .profile-edit-btn:hover { background:#1251a0; }
-        .profile-save-btn { background:#2ecc71; }
-        .profile-save-btn:hover { background:#27ae60; }
-        .profile-cancel-btn { background:#f7b731; color:#1976d2; }
-        .profile-cancel-btn:hover { background:#ffe082; }
-        .profile-upload-label { margin-top:0.2rem; }
-
-        /* More section styles */
-        .profile-more-section { margin: 0.5rem 0; }
-        .profile-more-item { padding: 0.6rem 0.5rem; cursor: pointer; border-radius: 6px; display: flex; align-items: center; gap: 0.7rem; font-size: 1rem; color: #1976d2; transition: background 0.2s; }
-        .profile-more-item:hover { background: #f7f7fa; }
-
-        /* Dark mode styles */
-        body.dark-mode { background: #181a1b; color: #f1f1f1; }
-        body.dark-mode .profile-dropdown { background: #23272b; color: #f1f1f1; box-shadow: 0 6px 24px #000a; }
-        body.dark-mode .profile-title, body.dark-mode .profile-label, body.dark-mode .profile-value { color: #f1f1f1 !important; }
-        body.dark-mode .profile-edit-input { background: #23272b; color: #f1f1f1; border: 1px solid #444; }
-        body.dark-mode .profile-more-item { color: #f7b731; }
-        body.dark-mode .profile-more-item:hover { background: #222; }
-        body.dark-mode .profile-edit-btn, body.dark-mode .profile-save-btn { background: #f7b731; color: #23272b; }
-        body.dark-mode .profile-cancel-btn { background: #23272b; color: #f7b731; border: 1px solid #f7b731; }
-        body.dark-mode .profile-logout-btn { background: #23272b; color: #f7b731; border: 1px solid #f7b731; }
-        body.dark-mode .menu-card {
-            background: #23272b;
-            color: #f1f1f1;
-            border: 1px solid #333;
-        }
-        body.dark-mode .menu-card .card-title {
-            color: #f7b731;
-        }
-        body.dark-mode .menu-card .card-description {
-            color: #b0b3b8;
-        }
-        body.dark-mode .menu-card .card-time {
-            background: #23272b;
-            color: #f7b731;
-            border: 1px solid #444;
-        }
-        body.dark-mode .card-icon {
-            color: #f7b731;
-        }
-
-        /* Profile Dropdown Responsive & Professional Styles */
-        .profile-dropdown {
-            background: #fff;
-            border-radius: 18px;
-            box-shadow: 0 8px 32px #0002;
-            padding: 2rem 1.5rem;
-            min-width: 340px;
-            max-width: 95vw;
-            margin-top: 1.2rem;
-            transition: box-shadow 0.3s, border-radius 0.3s;
-        }
-        .profile-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--primary-color);
-            text-align: center;
-            margin-bottom: 1.2rem;
-            letter-spacing: 1px;
-        }
-        .profile-detail-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 0.7rem;
-            font-size: 1.08rem;
-        }
-        .profile-label {
-            font-weight: 600;
-            color: #555;
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-        }
-        .profile-value {
-            color: #222;
-            font-weight: 500;
-            word-break: break-all;
-        }
-        .profile-edit-btn, .profile-logout-btn {
-            width: 100%;
-            padding: 0.7rem 0;
-            border-radius: 8px;
-            font-size: 1.08rem;
-            font-weight: 600;
-            margin-top: 0.7rem;
-            background: var(--secondary-color);
-            color: #fff;
-            border: none;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .profile-edit-btn:hover, .profile-logout-btn:hover {
-            background: var(--accent-color);
-        }
-        .profile-more-section {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-        .profile-more-item {
-            padding: 0.5rem 0.7rem;
-            border-radius: 6px;
-            cursor: pointer;
-            color: #1976d2;
-            font-weight: 500;
-            transition: background 0.2s;
-        }
-        .profile-more-item:hover {
-            background: #f7b73122;
-        }
-        .profile-avatar-row img {
-            border: 3px solid #f7b731;
-            box-shadow: 0 2px 12px #f7b73133;
-        }
-        /* Mobile Fullscreen Profile */
-        @media (max-width: 600px) {
-            .profile-dropdown {
-                position: fixed !important;
-                top: 0 !important;
-                left: 0 !important;
-                width: 100vw !important;
-                height: 100vh !important;
-                min-width: unset !important;
-                max-width: unset !important;
-                border-radius: 0 !important;
-                margin: 0 !important;
-                z-index: 2000 !important;
-                box-shadow: 0 0 0 #0000 !important;
-                padding: 2.5rem 1.2rem 1.2rem 1.2rem !important;
-                overflow-y: auto !important;
-                background: #fff !important;
-                display: flex !important;
-                flex-direction: column !important;
-                justify-content: flex-start !important;
-                align-items: stretch !important;
-            }
-            .profile-title {
-                font-size: 2rem;
-                margin-bottom: 2rem;
-            }
-            .profile-avatar-row img {
-                width: 110px !important;
-                height: 110px !important;
-            }
-            .profile-detail-row {
-                font-size: 1.18rem;
-                margin-bottom: 1.1rem;
-            }
-            .profile-edit-btn, .profile-logout-btn {
-                font-size: 1.18rem;
-                padding: 1rem 0;
+            
+            .login-btn {
+                width: 200px;
             }
         }
     </style>
 </head>
 <body>
-<!-- Firebase Authentication UI -->
-<div id="firebaseAuthSection" class="firebase-auth-section">
-    <h2 style="text-align:center; color:var(--primary-color); margin-bottom:1rem;">Email Verification Required</h2>
-    <div class="form-group">
-        <input id="emailVerification" type="email" placeholder="yourname@s.amity.edu" class="form-control">
+    <!-- Firebase Authentication UI -->
+    <div id="firebaseAuthSection" class="firebase-auth-section">
+        <h2 style="text-align:center; color:var(--primary-color); margin-bottom:1rem;">Email Verification Required</h2>
+        <div class="form-group">
+            <input id="emailVerification" type="email" placeholder="yourname@s.amity.edu" class="form-control">
+        </div>
+        <div class="form-group">
+            <input id="passwordVerification" type="password" placeholder="Create a password" class="form-control">
+        </div>
+        <button onclick="registerAndSend()" class="submit-btn">Register & Verify Email</button>
+        <p id="verificationStatus" class="verification-status"></p>
     </div>
-    <div class="form-group">
-        <input id="passwordVerification" type="password" placeholder="Create a password" class="form-control">
-    </div>
-    <button onclick="registerAndSend()" class="submit-btn">Register & Verify Email</button>
-    <p id="verificationStatus" class="verification-status"></p>
-</div>
 
-<div id="verifiedSection" style="display:none">
-    <p style="font-size:24px;color:green;text-align:center;">✅ Email Verified!</p>
-    <button onclick="enterSite()" class="submit-btn">Continue to Cafeteria</button>
-</div>
-        <header>
+    <div id="verifiedSection" style="display:none; text-align:center; padding:20px;">
+        <p style="font-size:24px;color:green;text-align:center;">✅ Email Verified!</p>
+        <button onclick="enterSite()" class="submit-btn" style="max-width:300px;">Continue to Cafeteria</button>
+    </div>
+
+    <header>
         <div class="header-content">
-            <span class="amity-logo-fire-wrapper">
-                <img src="logo.png" alt="Amity University Logo" class="amity-logo">
-            </span>
+            <img src="logo.png" alt="Amity University Logo" class="amity-logo">
             <div class="header-titles">
                 <h1 class="uni-title">Amity University</h1>
                 <h2 class="system-title">Bangalore Campus Cafeteria</h2>
             </div>
-            <div class="header-actions">
-                <!-- Swiggy-like Profile Dropdown and Edit Form -->
-                <div class="header-profile" id="headerProfile" style="display:none;">
-                    <button class="profile-icon-btn" id="profileIconBtn" aria-label="Profile">
-                        <img id="profileAvatarImg" src="https://ui-avatars.com/api/?name=User&size=100" alt="Profile" style="width:70px;height:70px;border-radius:50%;object-fit:cover;box-shadow:0 4px 16px #1976d233;" />
-                    </button>
-                    <div class="profile-dropdown" id="profileDropdown">
-                        <div class="profile-title">My Profile</div>
-                        <div id="profileDetailsView">
-                            <div class="profile-avatar-row" style="display:flex;justify-content:center;align-items:center;margin-bottom:1rem;">
-                                <img id="profileAvatarImgView" src="https://ui-avatars.com/api/?name=User&size=100" alt="Profile" style="width:70px;height:70px;border-radius:50%;object-fit:cover;box-shadow:0 4px 16px #1976d233;" />
-                            </div>
-                            <div class="profile-detail-row"><span class="profile-label"><i class="fas fa-user"></i> Name:</span><span class="profile-value" id="profileName"></span></div>
-                            <div class="profile-detail-row"><span class="profile-label"><i class="fas fa-envelope"></i> Email:</span><span class="profile-value" id="profileEmail"></span></div>
-                            <div class="profile-detail-row"><span class="profile-label"><i class="fas fa-phone"></i> Phone:</span><span class="profile-value" id="profilePhone"></span></div>
-                            <div class="profile-detail-row"><span class="profile-label"><i class="fas fa-venus-mars"></i> Gender:</span><span class="profile-value" id="profileGender"></span></div>
-                            <div class="profile-detail-row"><span class="profile-label"><i class="fas fa-birthday-cake"></i> Birthday:</span><span class="profile-value" id="profileBirthday"></span></div>
-                            <div class="profile-detail-row"><span class="profile-label"><i class="fas fa-map-marker-alt"></i> Address:</span><span class="profile-value" id="profileAddress"></span></div>
-                            <div class="profile-detail-row"><span class="profile-label"><i class="fas fa-user-tag"></i> Role:</span><span class="profile-value" id="profileRole"></span></div>
-                            <div class="profile-detail-row" id="profileCoinsRow">
-                            <span class="profile-label"><i class="fas fa-coins"></i> Coins:</span>
-                            <span class="profile-value" id="profileCoins">0</span>
-                            <button class="profile-add-coins-btn" id="addCoinsBtn" style="margin-left:10px;padding:3px 10px;font-size:0.95rem;background:#f7b731;color:#23272b;border:none;border-radius:5px;cursor:pointer;">Add Coins</button>
-                        </div>
-                            <button class="profile-edit-btn" id="profileEditBtn">Edit Profile</button>
-                            <hr style="margin:1rem 0;">
-                            <div class="profile-more-section">
-                                <div class="profile-more-item" id="sendFeedbackBtn"><i class="fas fa-comment-dots"></i> Send Feedback</div>
-                                <div class="profile-more-item" id="settingsBtn"><i class="fas fa-cog"></i> Settings</div>
-                                <div class="profile-more-item" id="themeToggleBtn"><i class="fas fa-adjust"></i> <span id="themeToggleText">Dark Mode</span></div>
-                            </div>
-                            <hr style="margin:1rem 0;">
-                            <button class="profile-logout-btn" id="profileLogoutBtn">Logout</button>
-                        </div>
-                        <form id="profileEditForm" style="display:none;flex-direction:column;gap:0.7rem;margin-top:0.5rem;">
-                            <div class="profile-avatar-row" style="display:flex;justify-content:center;align-items:center;flex-direction:column;gap:0.5rem;">
-                                <img id="profileAvatarImgEdit" src="https://ui-avatars.com/api/?name=User&size=100" alt="Profile" style="width:70px;height:70px;border-radius:50%;object-fit:cover;box-shadow:0 4px 16px #1976d233;" />
-                                <label for="profilePicInput" class="profile-upload-label" style="font-size:0.95rem;color:#1976d2;cursor:pointer;">Change Photo</label>
-                                <input type="file" id="profilePicInput" accept="image/*" style="display:none;">
-                            </div>
-                            <div class="profile-detail-row"><span class="profile-label"><i class="fas fa-user"></i> Name:</span><input type="text" id="editName" class="profile-edit-input" required></div>
-                            <div class="profile-detail-row"><span class="profile-label"><i class="fas fa-envelope"></i> Email:</span><input type="email" id="editEmail" class="profile-edit-input" required></div>
-                            <div class="profile-detail-row"><span class="profile-label"><i class="fas fa-phone"></i> Phone:</span><input type="tel" id="editPhone" class="profile-edit-input" pattern="[0-9]{10}" required></div>
-                            <div class="profile-detail-row"><span class="profile-label"><i class="fas fa-venus-mars"></i> Gender:</span><select id="editGender" class="profile-edit-input"><option value="">Select</option><option value="male">Male</option><option value="female">Female</option><option value="other">Other</option></select></div>
-                            <div class="profile-detail-row"><span class="profile-label"><i class="fas fa-birthday-cake"></i> Birthday:</span><input type="date" id="editBirthday" class="profile-edit-input"></div>
-                            <div class="profile-detail-row"><span class="profile-label"><i class="fas fa-map-marker-alt"></i> Address:</span><input type="text" id="editAddress" class="profile-edit-input"></div>
-                            <div class="profile-detail-row"><span class="profile-label"><i class="fas fa-user-tag"></i> Role:</span><input type="text" id="editRole" class="profile-edit-input" readonly></div>
-                            <div style="display:flex;gap:0.5rem;width:100%;margin-top:0.3rem;">
-                                <button type="button" id="saveProfileBtn" class="profile-save-btn">Save</button>
-                                <button type="button" id="cancelProfileBtn" class="profile-cancel-btn">Cancel</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <!-- End Swiggy-like Profile Dropdown -->
-                <div style="height:18px;"></div>
-                <button class="about-cafe-btn" id="aboutCafeBtnHeader"><i class="fas fa-info-circle"></i> About Cafeteria</button>
-            </div>
+            <button class="about-cafe-btn" id="aboutCafeBtnHeader">
+                <i class="fas fa-info-circle"></i> About Cafeteria
+            </button>
         </div>
     </header>
 
@@ -1134,10 +551,7 @@
                     <label for="studentEmail">Email <span style="color: #666; font-size: 0.9em;">(@s.amity.edu required)</span></label>
                     <input type="email" id="studentEmail" required 
                            pattern="[a-zA-Z0-9._%+-]+@s\.amity\.edu$"
-                           placeholder="yourname@s.amity.edu"
-                           oninvalid="this.setCustomValidity('Please enter a valid @s.amity.edu email address')"
-                           oninput="this.setCustomValidity('')"
-                    >
+                           placeholder="yourname@s.amity.edu">
                     <small style="color: #666; display: block; margin-top: 4px;">
                         <i class="fas fa-info-circle"></i> Must be a valid Amity student email ending with @s.amity.edu
                     </small>
@@ -1169,35 +583,6 @@
             </form>
         </div>
     </div>
-<!-- End Swiggy-like Profile Dropdown -->
-<div style="height:18px;"></div>
-    <!-- About Modal -->
-    <div id="aboutModal" class="about-modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>About Amity University Bangalore</h2>
-            
-            <div class="about-section">
-                <h3>Overview</h3>
-                <p>Amity University Bangalore is a premier educational institution committed to providing world-class education and fostering academic excellence. Established with a vision to be a leading global university, Amity Bangalore offers state-of-the-art infrastructure and innovative teaching methodologies.</p>
-            </div>
-
-            <div class="about-section">
-                <h3>Vision</h3>
-                <p>To be a world-class university that nurtures talent, creates knowledge, and transforms lives through innovative education, research, and holistic development of students.</p>
-            </div>
-
-            <div class="about-section">
-                <h3>Campus</h3>
-                <p>Our sprawling campus features modern facilities, cutting-edge laboratories, digital libraries, sports complexes, and dedicated research centers. The campus environment promotes creativity, innovation, and intellectual growth.</p>
-            </div>
-
-            <div class="about-section">
-                <h3>Academic Excellence</h3>
-                <p>With a diverse range of undergraduate and postgraduate programs, industry-aligned curriculum, experienced faculty, and strong industry connections, Amity University Bangalore ensures that students receive quality education that prepares them for global success.</p>
-            </div>
-        </div>
-    </div>
 
     <!-- About Cafeteria Modal -->
     <div id="aboutCafeModal" class="modal">
@@ -1210,94 +595,11 @@
                 <li><b>Student Favorites:</b> Dishes like Paneer Butter Masala, Masala Dosa, and Veg Burger are campus legends!</li>
                 <li><b>Healthy Options:</b> Salads, fresh juices, and low-oil recipes are always available.</li>
                 <li><b>Fun Fact:</b> The cafeteria serves over 1,000 meals and 500 cups of chai daily!</li>
-                <li><b>Special Days:</b> Don’t miss the Friday “Chef’s Special” and festival-themed menus.</li>
+                <li><b>Special Days:</b> Don't miss the Friday "Chef's Special" and festival-themed menus.</li>
             </ul>
             <button class="submit-btn" id="closeAboutCafeBtn" style="width: 100%;">Close</button>
         </div>
     </div>
-    
-    <!-- Feedback Modal -->
-    <div id="feedbackModal" class="modal">
-      <div class="modal-content" style="max-width:500px;">
-        <span class="close" id="closeFeedbackModal">&times;</span>
-        <h2 style="text-align:center;color:var(--primary-color);margin-bottom:1rem;">We Value Your Feedback!</h2>
-        <form id="feedbackForm">
-          <div class="form-group">
-            <label>1. What is your most favourite dish in our cafeteria?</label>
-            <input type="text" id="favDish" required>
-          </div>
-          <div class="form-group">
-            <label>2. How would you rate the cleanliness of the cafeteria?</label>
-            <select id="cleanliness" required>
-              <option value="">Select</option>
-              <option value="Excellent">Excellent</option>
-              <option value="Good">Good</option>
-              <option value="Average">Average</option>
-              <option value="Poor">Poor</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>3. How satisfied are you with the variety of food options?</label>
-            <select id="variety" required>
-              <option value="">Select</option>
-              <option value="Very Satisfied">Very Satisfied</option>
-              <option value="Satisfied">Satisfied</option>
-              <option value="Neutral">Neutral</option>
-              <option value="Dissatisfied">Dissatisfied</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>4. How do you find the pricing of the food items?</label>
-            <select id="pricing" required>
-              <option value="">Select</option>
-              <option value="Very Reasonable">Very Reasonable</option>
-              <option value="Reasonable">Reasonable</option>
-              <option value="Expensive">Expensive</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>5. Would you recommend our cafeteria to others?</label>
-            <select id="recommend" required>
-              <option value="">Select</option>
-              <option value="Yes">Yes</option>
-              <option value="Maybe">Maybe</option>
-              <option value="No">No</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Anything else you'd like to share? (Your own words)</label>
-            <textarea id="ownWords" rows="3" style="width:100%;border-radius:8px;padding:0.7rem;border:1px solid #ddd;"></textarea>
-          </div>
-          <button type="submit" class="submit-btn">Submit Feedback</button>
-        </form>
-      </div>
-    </div>
-    
-    <!-- Add Coins Modal -->
-    <div id="addCoinsModal" class="modal" style="display:none;position:fixed;z-index:9999;left:0;top:0;width:100vw;height:100vh;background:rgba(0,0,0,0.4);align-items:center;justify-content:center;">
-      <div class="modal-content" style="background:#fff;padding:2rem 1.5rem;border-radius:12px;max-width:350px;width:90%;box-shadow:0 8px 32px #0005;position:relative;">
-        <span class="close" id="closeAddCoinsModal" style="position:absolute;top:10px;right:18px;font-size:1.5rem;cursor:pointer;">&times;</span>
-        <h3 style="margin-bottom:1rem;color:#f7b731;text-align:center;">Add Coins</h3>
-        <div id="addCoinsStep1">
-          <label for="addCoinsPhone">Enter Mobile Number</label>
-          <input type="tel" id="addCoinsPhone" maxlength="10" pattern="[0-9]{10}" style="width:100%;margin-bottom:0.7rem;padding:0.5rem;border-radius:6px;border:1px solid #ccc;">
-          <button id="sendOtpBtn" style="width:100%;background:#f7b731;color:#23272b;padding:0.6rem 0;border:none;border-radius:6px;font-weight:600;">Send OTP</button>
-        </div>
-        <div id="addCoinsStep2" style="display:none;">
-          <label for="addCoinsOtp">Enter OTP</label>
-          <input type="text" id="addCoinsOtp" maxlength="6" pattern="[0-9]{6}" style="width:100%;margin-bottom:0.7rem;padding:0.5rem;border-radius:6px;border:1px solid #ccc;">
-          <button id="verifyOtpBtn" style="width:100%;background:#f7b731;color:#23272b;padding:0.6rem 0;border:none;border-radius:6px;font-weight:600;">Verify OTP</button>
-        </div>
-        <div id="addCoinsStep3" style="display:none;">
-          <label for="addCoinsAmount">Enter Amount to Add</label>
-          <input type="number" id="addCoinsAmount" min="1" style="width:100%;margin-bottom:0.7rem;padding:0.5rem;border-radius:6px;border:1px solid #ccc;">
-          <button id="addCoinsFinalBtn" style="width:100%;background:#f7b731;color:#23272b;padding:0.6rem 0;border:none;border-radius:6px;font-weight:600;">Add Coins</button>
-        </div>
-        <div id="addCoinsMessage" style="margin-top:1rem;text-align:center;color:#e74c3c;font-weight:500;"></div>
-      </div>
-    </div>
-
-    
 
     <main>
         <div class="welcome-section">
@@ -1361,96 +663,112 @@
     </footer>
 
     <!-- Firebase Scripts -->
-<script type="module">
-    // Firebase configuration and initialization
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendEmailVerification, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-auth.js";
+    <script type="module">
+        // Firebase configuration and initialization
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendEmailVerification, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-auth.js";
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyC9DFfu8a-anENHh4spS5PbJCXoUC6MhQc",
-        authDomain: "amity-cafeteria-ordering.firebaseapp.com",
-        projectId: "amity-cafeteria-ordering",
-        storageBucket: "amity-cafeteria-ordering.appspot.com",
-        messagingSenderId: "695302163579",
-        appId: "1:695302163579:web:f1e73ce5c8d290d6fe0110"
-    };
+        const firebaseConfig = {
+            apiKey: "AIzaSyC9DFfu8a-anENHh4spS5PbJCXoUC6MhQc",
+            authDomain: "amity-cafeteria-ordering.firebaseapp.com",
+            projectId: "amity-cafeteria-ordering",
+            storageBucket: "amity-cafeteria-ordering.appspot.com",
+            messagingSenderId: "695302163579",
+            appId: "1:695302163579:web:f1e73ce5c8d290d6fe0110"
+        };
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
 
-    // Authentication state observer
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-            if (user.emailVerified) {
-                document.getElementById('firebaseAuthSection').style.display = 'none';
-                document.getElementById('verifiedSection').style.display = 'block';
-                localStorage.setItem('userEmail', user.email);
-            }
-        } else {
-            document.getElementById('firebaseAuthSection').style.display = 'block';
-            document.getElementById('verifiedSection').style.display = 'none';
-            localStorage.removeItem('userEmail');
-        }
-    });
-
-    // Register and send verification email
-    window.registerAndSend = async function() {
-        const email = document.getElementById('emailVerification').value;
-        const password = document.getElementById('passwordVerification').value;
-        const statusElement = document.getElementById('verificationStatus');
-
-        if (!email.endsWith('@s.amity.edu')) {
-            statusElement.textContent = 'Please use an @s.amity.edu email address';
-            statusElement.style.color = 'red';
-            return;
-        }
-
-        try {
-            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-            await sendEmailVerification(userCredential.user);
-            statusElement.textContent = 'Verification email sent! Please check your inbox.';
-            statusElement.style.color = 'green';
-        } catch (error) {
-            if (error.code === 'auth/email-already-in-use') {
-                try {
-                    await signInWithEmailAndPassword(auth, email, password);
-                    if (!auth.currentUser.emailVerified) {
-                        await sendEmailVerification(auth.currentUser);
-                        statusElement.textContent = 'Verification email sent! Please check your inbox.';
-                        statusElement.style.color = 'green';
-                    }
-                } catch (signInError) {
-                    statusElement.textContent = 'Error: Invalid credentials';
-                    statusElement.style.color = 'red';
+        // Authentication state observer
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                if (user.emailVerified) {
+                    document.getElementById('firebaseAuthSection').style.display = 'none';
+                    document.getElementById('verifiedSection').style.display = 'block';
+                    localStorage.setItem('userEmail', user.email);
                 }
             } else {
-                statusElement.textContent = 'Error: ' + error.message;
-                statusElement.style.color = 'red';
+                // Don't show auth section automatically - only when student tries to login
+                localStorage.removeItem('userEmail');
             }
-        }
-    };
+        });
 
-    // Enter site after verification
-    window.enterSite = function() {
-        window.location.href = 'main.html';
-    };
+        // Register and send verification email
+        window.registerAndSend = async function() {
+            const email = document.getElementById('emailVerification').value;
+            const password = document.getElementById('passwordVerification').value;
+            const statusElement = document.getElementById('verificationStatus');
 
-    // Logout function
-    window.logout = async function() {
-        try {
-            await signOut(auth);
-            localStorage.removeItem('userEmail');
-            window.location.href = 'index1.html';
-        } catch (error) {
-            console.error('Error signing out:', error);
-        }
-    };
-</script>
+            if (!email.endsWith('@s.amity.edu')) {
+                statusElement.textContent = 'Please use an @s.amity.edu email address';
+                statusElement.style.color = 'red';
+                return;
+            }
+
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                await sendEmailVerification(userCredential.user);
+                statusElement.textContent = 'Verification email sent! Please check your inbox.';
+                statusElement.style.color = 'green';
+            } catch (error) {
+                if (error.code === 'auth/email-already-in-use') {
+                    try {
+                        await signInWithEmailAndPassword(auth, email, password);
+                        if (!auth.currentUser.emailVerified) {
+                            await sendEmailVerification(auth.currentUser);
+                            statusElement.textContent = 'Verification email sent! Please check your inbox.';
+                            statusElement.style.color = 'green';
+                        }
+                    } catch (signInError) {
+                        statusElement.textContent = 'Error: Invalid credentials';
+                        statusElement.style.color = 'red';
+                    }
+                } else {
+                    statusElement.textContent = 'Error: ' + error.message;
+                    statusElement.style.color = 'red';
+                }
+            }
+        };
+
+        // Enter site after verification
+        window.enterSite = function() {
+            // Get pending student data and save it permanently
+            const pendingData = sessionStorage.getItem('pendingStudentData');
+            if (pendingData) {
+                const studentData = JSON.parse(pendingData);
+                localStorage.setItem('studentData', JSON.stringify(studentData));
+                sessionStorage.removeItem('pendingStudentData');
+                
+                // Hide verification sections
+                document.getElementById('verifiedSection').style.display = "none";
+                document.getElementById('firebaseAuthSection').style.display = "none";
+                
+                // Show menu and welcome user
+                showMenuItems(studentData.name);
+            } else {
+                window.location.href = 'main.html';
+            }
+        };
+
+        // Logout function
+        window.logout = async function() {
+            try {
+                await signOut(auth);
+                localStorage.removeItem('userEmail');
+                localStorage.removeItem('studentData');
+                localStorage.removeItem('adminData');
+                window.location.href = 'index.html';
+            } catch (error) {
+                console.error('Error signing out:', error);
+            }
+        };
+    </script>
+
     <script>
         // Get modals and forms
         const studentModal = document.getElementById('studentModal');
         const adminModal = document.getElementById('adminModal');
-        const aboutModal = document.getElementById('aboutModal');
         const aboutCafeModal = document.getElementById('aboutCafeModal');
         const studentForm = document.getElementById('studentForm');
         const adminForm = document.getElementById('adminForm');
@@ -1458,10 +776,7 @@
         // Get close buttons
         const studentCloseBtn = studentModal.querySelector('.close');
         const adminCloseBtn = adminModal.querySelector('.close');
-        const aboutCloseBtn = aboutModal.querySelector('.close');
         const closeAboutCafeBtn = document.getElementById('closeAboutCafeBtn');
-        const closeFeedbackModal = document.getElementById('closeFeedbackModal');
-        const closeAddCoinsModal = document.getElementById('closeAddCoinsModal');
 
         // Modal functions
         function openStudentModal() {
@@ -1472,16 +787,8 @@
             adminModal.style.display = 'block';
         }
 
-        function openAboutModal() {
-            document.getElementById('aboutModal').style.display = 'block';
-        }
-
         function openAboutCafeModal() {
             aboutCafeModal.style.display = 'block';
-        }
-
-        function closeAboutModal() {
-            document.getElementById('aboutModal').style.display = 'none';
         }
 
         function closeAboutCafeModal() {
@@ -1498,102 +805,32 @@
                 notification.classList.remove('show');
             }, 3000);
         }
-// Firebase Authentication Functions
-function registerAndSend() {
-    const emailVal = document.getElementById('emailVerification').value.trim();
-    const passVal = document.getElementById('passwordVerification').value;
 
-    if (!emailVal.endsWith("@s.amity.edu")) {
-        showNotification("Only @s.amity.edu emails are allowed.", true);
-        return;
-    }
-
-    auth.createUserWithEmailAndPassword(emailVal, passVal)
-        .then(({user}) => {
-            user.sendEmailVerification({url: window.location.origin});
-            showNotification("Verification email sent! Please check your inbox.");
-            document.getElementById('verificationStatus').textContent = "Verification mail sent! Check your inbox.";
-        })
-        .catch(err => {
-            showNotification(err.message, true);
-            document.getElementById('verificationStatus').textContent = "Error: " + err.message;
-        });
-}
-
-// Monitor auth state
-auth.onAuthStateChanged(user => {
-    if (user && user.emailVerified) {
-        document.getElementById('verifiedSection').style.display = "block";
-        document.getElementById('firebaseAuthSection').style.display = "none";
-        showNotification("Email verified successfully!");
-        showMenuItems(user.displayName || "Verified User");
-    }
-});
-
-function enterSite() {
-    document.getElementById('verifiedSection').style.display = "none";
-    document.querySelector('.menu-grid').style.display = "grid";
-    document.getElementById('firebaseAuthSection').style.display = "none";
-}
         function capitalizeWords(str) {
             return str.replace(/\b\w/g, c => c.toUpperCase());
         }
+
         function showMenuItems(name) {
             document.querySelector('.welcome-description').style.display = 'none';
-            document.querySelector('.login-buttons').style.display = 'none';            document.querySelector('.menu-grid').style.display = 'grid';
-            // Remove old logout button, show nothing here
+            document.querySelector('.login-buttons').style.display = 'none';
+            document.querySelector('.menu-grid').style.display = 'grid';
+            
+            // Update welcome section
             const welcomeSection = document.querySelector('.welcome-section');
             welcomeSection.innerHTML = `
                 <h2>Welcome, ${name}!</h2>
                 <p>Please select from our menu options below</p>
-                <div style="margin-top: 15px; padding: 10px; background-color: #fef9e7; border-radius: 8px; border: 1px solid #f7b731; text-align: center;">
-                    <i class="fas fa-coins" style="color: #f7b731; margin-right: 8px;"></i>
-                    <span style="color: #1a3a6e; font-weight: 600;">Add coins to your profile for exclusive rewards and faster checkouts!</span>
-                </div>
+                <button onclick="logout()" style="margin-top: 15px; padding: 10px 20px; background: #e74c3c; color: white; border: none; border-radius: 8px; cursor: pointer;">Logout</button>
             `;
+            
             document.querySelector('.menu-grid').scrollIntoView({ behavior: 'smooth' });
             showNotification('Welcome ' + name + '! You can now access the menu.');
-            // Show profile icon
-            document.getElementById('headerProfile').style.display = 'flex';
-            // Fill profile details
-            let user = JSON.parse(localStorage.getItem('studentData')) || JSON.parse(localStorage.getItem('adminData'));
-            document.getElementById('profileName').textContent = capitalizeWords(user.name || '-');
-            document.getElementById('profilePhone').textContent = user.phone || '-';
-            document.getElementById('profileEmail').textContent = user.email ? user.email : '-';
-            document.getElementById('profileBirthday').textContent = user.birthday || '-';
-            document.getElementById('profileRole').textContent = user.type === 'admin' ? 'Admin' : 'Student';
-            document.getElementById('profileAddress').textContent = capitalizeWords(user.address || '-');
-            document.getElementById('profileGender').textContent = capitalizeWords(user.gender || '-');
-            // Set profile image
-            const img = document.getElementById('profileAvatarImg');
-            if(user.profilePic) {
-                img.src = user.profilePic;
-            } else {
-                img.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name||'User')}&size=70`;
-            }
-            // Hide edit form, show details view
-            document.getElementById('profileDetailsView').style.display = '';
-            document.getElementById('profileEditForm').style.display = 'none';
         }
-
-        function logout() {
-    auth.signOut().then(() => {
-        localStorage.removeItem('studentData');
-        localStorage.removeItem('adminData');
-        localStorage.removeItem('profileCoins');
-        location.reload();
-    }).catch(err => {
-        showNotification("Error during logout: " + err.message, true);
-    });
-}
 
         // Close modal events
         studentCloseBtn.onclick = () => studentModal.style.display = 'none';
         adminCloseBtn.onclick = () => adminModal.style.display = 'none';
-        aboutCloseBtn.onclick = () => aboutModal.style.display = 'none';
         closeAboutCafeBtn.onclick = () => closeAboutCafeModal();
-        closeFeedbackModal.onclick = () => document.getElementById('feedbackModal').style.display = 'none';
-        closeAddCoinsModal.onclick = () => document.getElementById('addCoinsModal').style.display = 'none';
 
         // Close modals when clicking outside
         window.onclick = function(event) {
@@ -1603,24 +840,12 @@ function enterSite() {
             if (event.target == adminModal) {
                 adminModal.style.display = 'none';
             }
-            const modal = document.getElementById('aboutModal');
-            if (event.target == modal) {
-                modal.style.display = 'none';
-            }
-            const feedbackModal = document.getElementById('feedbackModal');
-            if (event.target == feedbackModal) {
-                feedbackModal.style.display = 'none';
-            }
-            const addCoinsModal = document.getElementById('addCoinsModal');
-            if (event.target == addCoinsModal) {
-                addCoinsModal.style.display = 'none';
-            }
             if (event.target == aboutCafeModal) {
                 aboutCafeModal.style.display = 'none';
             }
         }
 
-        // Handle student form submission
+        // Handle student form submission - ONLY TRIGGER EMAIL VERIFICATION HERE
         studentForm.onsubmit = function(e) {
             e.preventDefault();
             const name = document.getElementById('studentName').value;
@@ -1633,22 +858,29 @@ function enterSite() {
                 return;
             }
 
-            localStorage.setItem('studentData', JSON.stringify({
+            // Show email verification section for student emails
+            document.getElementById('firebaseAuthSection').style.display = "block";
+            document.getElementById('emailVerification').value = email;
+            studentModal.style.display = 'none';
+            
+            // Store student data temporarily until email verification
+            sessionStorage.setItem('pendingStudentData', JSON.stringify({
                 name: name,
                 phone: phone,
                 email: email,
                 type: 'student'
             }));
-            studentModal.style.display = 'none';
-            showMenuItems(name);
+
+            showNotification('Please verify your email to continue');
         };
 
-        // Handle admin form submission
+        // Handle admin form submission - NO EMAIL VERIFICATION
         adminForm.onsubmit = function(e) {
             e.preventDefault();
             const name = document.getElementById('adminName').value;
             const adminId = document.getElementById('adminId').value;
             const phone = document.getElementById('adminPhone').value;
+            
             localStorage.setItem('adminData', JSON.stringify({
                 name: name,
                 adminId: adminId,
@@ -1660,343 +892,26 @@ function enterSite() {
             showMenuItems(name);
         };
 
-        // Swiggy-like Profile Dropdown Logic
-        const profileIconBtn = document.getElementById('profileIconBtn');
-        const profileDropdown = document.getElementById('profileDropdown');
-        profileIconBtn.onclick = function(e) {
-          e.stopPropagation();
-          profileDropdown.style.display = (profileDropdown.style.display === 'block') ? 'none' : 'block';
-        };
-        document.addEventListener('click', function(e) {
-          if (!profileDropdown.contains(e.target) && e.target !== profileIconBtn) {
-            profileDropdown.style.display = 'none';
-          }
-        });
-
-        function loadProfileData() {
-          const user = JSON.parse(localStorage.getItem('studentData')) || JSON.parse(localStorage.getItem('adminData'));
-          if (!user) return;
-          document.getElementById('profileName').textContent = user.name || '';
-          document.getElementById('profileEmail').textContent = user.email || user.adminId || '';
-          document.getElementById('profilePhone').textContent = user.phone || '';
-          document.getElementById('profileGender').textContent = user.gender || '';
-          document.getElementById('profileBirthday').textContent = user.birthday || '';
-          document.getElementById('profileAddress').textContent = user.address || '';
-          document.getElementById('profileRole').textContent = user.type || '';
-          document.getElementById('profileAvatarImgView').src = user.profilePic || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(user.name || 'User') + '&size=100';
-          document.getElementById('profileAvatarImg').src = user.profilePic || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(user.name || 'User') + '&size=100';
-        }
-
-        profileEditBtn.onclick = function() {
-          const user = JSON.parse(localStorage.getItem('studentData')) || JSON.parse(localStorage.getItem('adminData'));
-          document.getElementById('editName').value = user.name || '';
-          document.getElementById('editEmail').value = user.email || user.adminId || '';
-          document.getElementById('editPhone').value = user.phone || '';
-          document.getElementById('editGender').value = user.gender || '';
-          document.getElementById('editBirthday').value = user.birthday || '';
-          document.getElementById('editAddress').value = user.address || '';
-          document.getElementById('editRole').value = user.type || '';
-          document.getElementById('profileAvatarImgEdit').src = user.profilePic || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(user.name || 'User') + '&size=100';
-          profileDetailsView.style.display = 'none';
-          profileEditForm.style.display = 'flex';
+        // About cafeteria button event
+        document.getElementById('aboutCafeBtnHeader').onclick = function() {
+            openAboutCafeModal();
         };
 
-        // Profile picture upload in edit mode
-        const profilePicInput = document.getElementById('profilePicInput');
-        const profileAvatarImgEdit = document.getElementById('profileAvatarImgEdit');
-        document.querySelector('.profile-upload-label').onclick = () => profilePicInput.click();
-        profilePicInput.onchange = function(e) {
-          const file = e.target.files[0];
-          if(file) {
-            const reader = new FileReader();
-            reader.onload = function(evt) {
-              profileAvatarImgEdit.src = evt.target.result;
-              profileAvatarImg.src = evt.target.result;
-            };
-            reader.readAsDataURL(file);
-          }
-        };
-
-        saveProfileBtn.onclick = function() {
-          let user = JSON.parse(localStorage.getItem('studentData')) || JSON.parse(localStorage.getItem('adminData'));
-          user.name = document.getElementById('editName').value;
-          user.email = document.getElementById('editEmail').value;
-          user.phone = document.getElementById('editPhone').value;
-          user.gender = document.getElementById('editGender').value;
-          user.birthday = document.getElementById('editBirthday').value;
-          user.address = document.getElementById('editAddress').value;
-          user.type = document.getElementById('editRole').value;
-          user.profilePic = profileAvatarImgEdit.src;
-          if(user.type === 'student') localStorage.setItem('studentData', JSON.stringify(user));
-          else localStorage.setItem('adminData', JSON.stringify(user));
-          loadProfileData();
-          profileDetailsView.style.display = '';
-          profileEditForm.style.display = 'none';
-          showNotification('Profile updated successfully!');
-        };
-
-        cancelProfileBtn.onclick = function() {
-          profileDetailsView.style.display = '';
-          profileEditForm.style.display = 'none';
-        };
-
-        // Theme toggle logic
-        const themeToggleBtn = document.getElementById('themeToggleBtn');
-        const themeToggleText = document.getElementById('themeToggleText');
-        function setTheme(mode) {
-          if (mode === 'dark') {
-            document.body.classList.add('dark-mode');
-            themeToggleText.textContent = 'Light Mode';
-            localStorage.setItem('theme', 'dark');
-          } else {
-            document.body.classList.remove('dark-mode');
-            themeToggleText.textContent = 'Dark Mode';
-            localStorage.setItem('theme', 'light');
-          }
-        }
-        themeToggleBtn.onclick = function() {
-          const isDark = document.body.classList.contains('dark-mode');
-          setTheme(isDark ? 'light' : 'dark');
-        };
+        // Initialize on page load
         window.onload = function() {
-          loadProfileData();
-          const savedTheme = localStorage.getItem('theme') || 'light';
-          setTheme(savedTheme);
-
-          // Check if user needs to verify email
-          const user = auth.currentUser;
-          if (!user || !user.emailVerified) {
-              document.getElementById('firebaseAuthSection').style.display = "block";
-          } else {
-              // Check if user is already logged in
-              const studentData = JSON.parse(localStorage.getItem('studentData'));
-              const adminData = JSON.parse(localStorage.getItem('adminData'));
-              
-              if (studentData || adminData) {
-                  const userData = studentData || adminData;
-                  showMenuItems(userData.name);
-              }
-          }
-
-          // Initialize UI elements
-          const modal = document.getElementById("myModal");
-          const modalImg = document.getElementById("img01");
-          const span = document.getElementsByClassName("close")[0];
-
-          // Modal event listeners
-          if (span) {
-              span.onclick = function() {
-                  modal.style.display = "none";
-              }
-          }
-
-          window.onclick = function(event) {
-              if (event.target == modal) {
-                  modal.style.display = "none";
-              }
-          }
-
-          // Image click handlers
-          const images = document.getElementsByClassName("menu-img");
-          for (let img of images) {
-              img.onclick = function() {
-                  modal.style.display = "block";
-                  modalImg.src = this.src;
-              }
-          }
-        };
-
-        // Additional Firebase-related functions
-        function enterSite() {
-            document.getElementById('verifiedSection').style.display = "none";
-            document.querySelector('.menu-grid').style.display = "grid";
+            // Hide email verification on load - only show when student tries to login
             document.getElementById('firebaseAuthSection').style.display = "none";
-        }
-
-        // Firebase Authentication Functions
-        function registerAndSend() {
-            const emailVal = document.getElementById('emailVerification').value.trim();
-            const passVal = document.getElementById('passwordVerification').value;
-
-            if (!emailVal.endsWith("@s.amity.edu")) {
-                showNotification("Only @s.amity.edu emails are allowed.", true);
-                return;
-            }
-
-            auth.createUserWithEmailAndPassword(emailVal, passVal)
-                .then(({user}) => {
-                    user.sendEmailVerification({url: window.location.origin});
-                    showNotification("Verification email sent! Please check your inbox.");
-                    document.getElementById('verificationStatus').textContent = "Verification mail sent! Check your inbox.";
-                })
-                .catch(err => {
-                    showNotification(err.message, true);
-                    document.getElementById('verificationStatus').textContent = "Error: " + err.message;
-                });
-
-        // Feedback modal logic
-        const feedbackModal = document.getElementById('feedbackModal');
-        document.getElementById('sendFeedbackBtn').onclick = function() {
-          feedbackModal.style.display = 'block';
-        };
-        closeFeedbackModal.onclick = function() {
-          feedbackModal.style.display = 'none';
-        };
-        window.onclick = function(event) {
-          if (event.target === feedbackModal) feedbackModal.style.display = 'none';
-        };
-        document.getElementById('feedbackForm').onsubmit = function(e) {
-          e.preventDefault();
-          // Collect feedback
-          const feedback = {
-            favDish: document.getElementById('favDish').value,
-            cleanliness: document.getElementById('cleanliness').value,
-            variety: document.getElementById('variety').value,
-            pricing: document.getElementById('pricing').value,
-            recommend: document.getElementById('recommend').value,
-            ownWords: document.getElementById('ownWords').value
-          };
-          // You can send this to a server or store in localStorage
-          console.log('Feedback submitted:', feedback);
-          feedbackModal.style.display = 'none';
-          showNotification('Thank you for your feedback!');
-          document.getElementById('feedbackForm').reset();
-        };
-
-        // --- Add Coins Modal Logic ---
-        let coins = parseInt(localStorage.getItem('profileCoins') || '0');
-        const profileCoins = document.getElementById('profileCoins');
-        function updateCoinsDisplay() {
-            profileCoins.textContent = coins;
-        }
-        updateCoinsDisplay();
-
-        const addCoinsBtn = document.getElementById('addCoinsBtn');
-        let generatedOtp = '';
-        let verifiedMobile = '';
-
-        addCoinsBtn.onclick = function() {
-            document.getElementById('addCoinsModal').style.display = 'flex';
-            document.getElementById('addCoinsStep1').style.display = '';
-            document.getElementById('addCoinsStep2').style.display = 'none';
-            document.getElementById('addCoinsStep3').style.display = 'none';
-            document.getElementById('addCoinsPhone').value = '';
-            document.getElementById('addCoinsOtp').value = '';
-            document.getElementById('addCoinsAmount').value = '';
-            document.getElementById('addCoinsMessage').textContent = '';
-        };
-               sendOtpBtn.onclick = function() {
-            const phone = document.getElementById('addCoinsPhone').value.trim();
-            if (!/^\d{10}$/.test(phone)) {
-                addCoinsMessage.textContent = 'Please enter a valid 10-digit mobile number.';
-                return;
-            }
-            generatedOtp = (Math.floor(100000 + Math.random() * 900000)).toString();
-            // Show OTP above the OTP input for 2 minutes
-            const otpDisplay = document.createElement('div');
-            otpDisplay.id = 'otpDisplay';
-            otpDisplay.style = 'margin-bottom:10px;color:#2980b9;font-weight:600;font-size:1.1rem;text-align:center;';
-            otpDisplay.textContent = 'Your OTP: ' + generatedOtp + ' (valid for 2 minutes)';
-            addCoinsStep2.insertBefore(otpDisplay, addCoinsStep2.firstChild);
-            addCoinsMessage.textContent = 'OTP sent to ' + phone + '. Please enter the OTP below.';
-            setTimeout(() => {
-                addCoinsStep1.style.display = 'none';
-                addCoinsStep2.style.display = '';
-                addCoinsMessage.textContent = '';
-                // Remove OTP after 2 minutes
-                setTimeout(() => {
-                    if (document.getElementById('otpDisplay')) {
-
-
-                        document.getElementById('otpDisplay').textContent = 'OTP expired. Please request a new OTP.';
-                    }
-                }, 120000);
-            }, 1500);
-        };
-        window.onload = function() {
-    loadProfileData();
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    setTheme(savedTheme);
-
-    // Check if user needs to verify email
-    const user = auth.currentUser;
-    if (!user || !user.emailVerified) {
-        document.getElementById('firebaseAuthSection').style.display = "block";
-    } else {
-        // Check if user is already logged in
-        const studentData = JSON.parse(localStorage.getItem('studentData'));
-        const adminData = JSON.parse(localStorage.getItem('adminData'));
-        
-        if (studentData || adminData) {
-            const userData = studentData || adminData;
-            showMenuItems(userData.name);
-        }
-    }
-
-    // Initialize UI elements
-    const modal = document.getElementById("myModal");
-    const modalImg = document.getElementById("img01");
-    const span = document.getElementsByClassName("close")[0];
-
-    // Modal event listeners
-    if (span) {
-        span.onclick = function() {
-            modal.style.display = "none";
-        }
-    }
-
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    }
-
-    // Image click handlers
-    const images = document.getElementsByClassName("menu-img");
-    for (let img of images) {
-        img.onclick = function() {
-            modal.style.display = "block";
-            modalImg.src = this.src;
-        }
-    }
-        };
-        verifyOtpBtn.onclick = function() {
-            const otp = document.getElementById('addCoinsOtp').value.trim();
-            if (otp === generatedOtp) {
-                addCoinsStep2.style.display = 'none';
-                addCoinsStep3.style.display = '';
-                verifiedMobile = document.getElementById('addCoinsPhone').value.trim();
-                addCoinsMessage.textContent = 'Verified successfully! Please enter the amount to add.';
-                setTimeout(() => { addCoinsMessage.textContent = ''; }, 1500);
-            } else {
-                addCoinsMessage.textContent = 'Invalid OTP. Please try again.';
+            document.getElementById('verifiedSection').style.display = "none";
+            
+            // Check if user is already logged in
+            const studentData = JSON.parse(localStorage.getItem('studentData'));
+            const adminData = JSON.parse(localStorage.getItem('adminData'));
+            
+            if (studentData || adminData) {
+                const userData = studentData || adminData;
+                showMenuItems(userData.name);
             }
         };
-        addCoinsFinalBtn.onclick = function() {
-            const amount = parseInt(document.getElementById('addCoinsAmount').value);
-            if (isNaN(amount) || amount < 1) {
-                addCoinsMessage.textContent = 'Please enter a valid amount.';
-                return;
-            }
-            if (coins + amount > 5000) {
-                addCoinsMessage.textContent = 'Coin limit reached. You cannot have more than 5000 coins.';
-                return;
-            }
-            coins += amount;
-            localStorage.setItem('profileCoins', coins);
-            updateCoinsDisplay();
-            addCoinsStep3.style.display = 'none';
-            addCoinsMessage.textContent = 'Coins added successfully!';
-            setTimeout(() => {
-                addCoinsModal.style.display = 'none';
-                addCoinsMessage.textContent = '';
-            }, 1800);
-        };
-        // Close modal on outside click
-        window.addEventListener('click', function(e) {
-            if (e.target === addCoinsModal) addCoinsModal.style.display = 'none';
-        });
-        // --- End Add Coins Modal Logic ---
     </script>
 </body>
 </html>
