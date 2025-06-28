@@ -1043,16 +1043,24 @@
             <h2 style="text-align: center; margin-bottom: 1.5rem; color: var(--primary-color);">Student Login</h2>
             <form id="studentForm">
                 <div class="form-group">
-                    <label for="studentName">Student Name:</label>
-                    <input type="text" id="studentName" required>
+                    <label for="studentName">Full Name</label>
+                    <input type="text" id="studentName" required placeholder="Enter your full name">
                 </div>
                 <div class="form-group">
-                    <label for="studentPhone">Phone Number:</label>
-                    <input type="tel" id="studentPhone" pattern="[0-9]{10}" title="Please enter a valid 10-digit number" required>
+                    <label for="studentPhone">Phone Number</label>
+                    <input type="tel" id="studentPhone" required pattern="[0-9]{10}" maxlength="10" placeholder="Enter 10-digit number">
                 </div>
                 <div class="form-group">
-                    <label for="studentEmail">College Email (@amity.edu):</label>
-                    <input type="email" id="studentEmail" pattern=".+@amity\.edu" title="Please enter your Amity email address" required>
+                    <label for="studentEmail">Email <span style="color: #666; font-size: 0.9em;">(@s.amity.edu required)</span></label>
+                    <input type="email" id="studentEmail" required 
+                           pattern="[a-zA-Z0-9._%+-]+@s\.amity\.edu$"
+                           placeholder="yourname@s.amity.edu"
+                           oninvalid="this.setCustomValidity('Please enter a valid @s.amity.edu email address')"
+                           oninput="this.setCustomValidity('')"
+                    >
+                    <small style="color: #666; display: block; margin-top: 4px;">
+                        <i class="fas fa-info-circle"></i> Must be a valid Amity student email ending with @s.amity.edu
+                    </small>
                 </div>
                 <button type="submit" class="submit-btn">Login</button>
             </form>
@@ -1658,7 +1666,7 @@
             document.getElementById('addCoinsAmount').value = '';
             document.getElementById('addCoinsMessage').textContent = '';
         };
-        sendOtpBtn.onclick = function() {
+               sendOtpBtn.onclick = function() {
             const phone = document.getElementById('addCoinsPhone').value.trim();
             if (!/^\d{10}$/.test(phone)) {
                 addCoinsMessage.textContent = 'Please enter a valid 10-digit mobile number.';
