@@ -6,6 +6,17 @@
     <title>Amity University Cafeteria</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+
+    <script>
+     const firebaseConfig = {/* …your keys… */};
+     firebase.initializeApp(firebaseConfig);
+     const auth = firebase.auth();
+    </script>
+    
     <style>
         :root {
             --primary-color: #2c3e50;
@@ -938,7 +949,7 @@
                 </div>
                 <div class="form-group">
                     <label for="studentEmail">College Email (@amity.edu):</label>
-                    <input type="email" id="studentEmail" pattern=".+@amity\.edu" title="Please enter your Amity email address" required>
+                    <input type="email" id="studentEmail" pattern="@s.amity.edu" title="Please enter your Amity email address" required>
                 </div>
                 <button type="submit" class="submit-btn">Login</button>
             </form>
@@ -1092,6 +1103,40 @@
         </div>
         <div id="addCoinsMessage" style="margin-top:1rem;text-align:center;color:#e74c3c;font-weight:500;"></div>
       </div>
+    </div>
+
+    <!-- Firebase Email Verification Section -->
+    <div id="firebaseAuthModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeFirebaseAuth()">&times;</span>
+            
+            <section id="email">
+                <!-- STUDENT LOGIN (fits inside your section) -->
+                <div id="loginBox" style="max-width:320px;margin:0 auto;">
+                  <h3 style="margin-bottom: 1rem; text-align: center; color: var(--primary-color);">Student Login</h3>
+
+                  <div class="form-group">
+                    <input id="email" class="form-control" style="width:100%;padding:0.75rem;border:1px solid #ddd;border-radius:8px;margin-bottom:1rem;"
+                           type="email" placeholder="name@s.amity.edu">
+                  </div>
+
+                  <div class="form-group">
+                    <input id="pass" class="form-control" style="width:100%;padding:0.75rem;border:1px solid #ddd;border-radius:8px;margin-bottom:1rem;"
+                           type="password" placeholder="Create password">
+                  </div>
+
+                  <button class="submit-btn" style="width:100%;padding:0.75rem;background:var(--primary-color);color:white;border:none;border-radius:8px;font-size:1rem;cursor:pointer;"
+                          onclick="registerAndSend()">Register & Verify</button>
+
+                  <small id="status" style="color:#28a745;display:block;margin-top:1rem;text-align:center;"></small>
+
+                  <div id="verifiedBox" style="display:none;">
+                     <p style="color:#28a745;font-size:1.2rem;text-align:center;margin-top:1.5rem;">✅ Email Verified!</p>
+                     <a href="menu.html" style="width:100%;padding:0.75rem;background:#28a745;color:white;border:none;border-radius:8px;font-size:1rem;text-decoration:none;display:inline-block;text-align:center;margin-top:0.5rem;">Continue</a>
+                  </div>
+                </div>
+            </section>
+        </div>
     </div>
 
     <main>
@@ -1607,6 +1652,40 @@
             if (e.target === addCoinsModal) addCoinsModal.style.display = 'none';
         });
         // --- End Add Coins Modal Logic ---
+
+        // Firebase Email Verification
+        const firebaseAuthModal = document.getElementById('firebaseAuthModal');
+        function openFirebaseAuth(email) {
+            document.getElementById('email').value = email;
+            firebaseAuthModal.style.display = 'block';
+        }
+        function closeFirebaseAuth() {
+            firebaseAuthModal.style.display = 'none';
+        }
+        function registerAndSend(){
+          const emailVal = email.value.trim();
+          const passVal  = pass.value;
+          if(!emailVal.endsWith("@s.amity.edu")){
+             alert("Only @s.amity.edu e‑mails allowed"); return;
+          }
+          auth.createUserWithEmailAndPassword(emailVal, passVal)
+              .then(({user})=>{
+                  user.sendEmailVerification({url: window.location.href});
+                  status.innerText = "Verification mail sent! Check inbox.";
+              })
+              .catch(err=>status.innerText = "Error: "+err.message);
+        }
+
+        auth.onAuthStateChanged(u=>{
+          if(u && u.emailVerified){
+             loginBox.querySelectorAll('input,button').forEach(el=>el.disabled=true);
+             verifiedBox.style.display = 'block';
+          }
+        });
+        function handleFirebaseAuth() {
+            // Keep for backward compatibility
+            registerAndSend();
+        }
     </script>
 </body>
 </html>
