@@ -6,24 +6,6 @@
     <title>Amity University Cafeteria</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
-    
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-
-    <script>
-     const firebaseConfig = {
-       apiKey: "AIzaSyA1wI4DGhM6UgQYJFZElN8z1J4RcX5q9_o",
-       authDomain: "amity-cafeteria-9e72f.firebaseapp.com",
-       projectId: "amity-cafeteria-9e72f",
-       storageBucket: "amity-cafeteria-9e72f.firebasestorage.app",
-       messagingSenderId: "474893024576",
-       appId: "1:474893024576:web:4e7b8b3a4e7b8b3a4e7b8b"
-     };
-     firebase.initializeApp(firebaseConfig);
-     const auth = firebase.auth();
-    </script>
-    
     <style>
         :root {
             --primary-color: #2c3e50;
@@ -956,7 +938,7 @@
                 </div>
                 <div class="form-group">
                     <label for="studentEmail">College Email (@amity.edu):</label>
-                    <input type="email" id="studentEmail" pattern="@s.amity.edu" title="Please enter your Amity email address" required>
+                    <input type="email" id="studentEmail" pattern=".+@amity\.edu" title="Please enter your Amity email address" required>
                 </div>
                 <button type="submit" class="submit-btn">Login</button>
             </form>
@@ -1112,40 +1094,6 @@
       </div>
     </div>
 
-    <!-- Firebase Email Verification Section -->
-    <div id="firebaseAuthModal" class="modal" style="display: none;">
-        <div class="modal-content">
-            <span class="close" onclick="closeFirebaseAuth()">&times;</span>
-            
-            <section id="email">
-                <!-- STUDENT LOGIN (fits inside your section) -->
-                <div id="loginBox" style="max-width:320px;margin:0 auto;">
-                  <h3 style="margin-bottom: 1rem; text-align: center; color: var(--primary-color);">Student Login</h3>
-
-                  <div class="form-group">
-                    <input id="email" class="form-control" style="width:100%;padding:0.75rem;border:1px solid #ddd;border-radius:8px;margin-bottom:1rem;"
-                           type="email" placeholder="name@s.amity.edu">
-                  </div>
-
-                  <div class="form-group">
-                    <input id="pass" class="form-control" style="width:100%;padding:0.75rem;border:1px solid #ddd;border-radius:8px;margin-bottom:1rem;"
-                           type="password" placeholder="Create password">
-                  </div>
-
-                  <button class="submit-btn" type="button" style="width:100%;padding:0.75rem;background:var(--primary-color);color:white;border:none;border-radius:8px;font-size:1rem;cursor:pointer;"
-                          onclick="console.log('Button clicked!'); registerAndSend();">Register & Verify</button>
-
-                  <small id="status" style="color:#28a745;display:block;margin-top:1rem;text-align:center;"></small>
-
-                  <div id="verifiedBox" style="display:none;">
-                     <p style="color:#28a745;font-size:1.2rem;text-align:center;margin-top:1.5rem;">✅ Email Verified!</p>
-                     <a href="menu.html" style="width:100%;padding:0.75rem;background:#28a745;color:white;border:none;border-radius:8px;font-size:1rem;text-decoration:none;display:inline-block;text-align:center;margin-top:0.5rem;">Continue</a>
-                  </div>
-                </div>
-            </section>
-        </div>
-    </div>
-
     <main>
         <div class="welcome-section">
             <h2>Welcome to Our Cafeteria</h2>
@@ -1216,14 +1164,6 @@
         const studentForm = document.getElementById('studentForm');
         const adminForm = document.getElementById('adminForm');
         
-        // Firebase authentication elements
-        const firebaseAuthModal = document.getElementById('firebaseAuthModal');
-        const email = document.getElementById('email');
-        const pass = document.getElementById('pass');
-        const status = document.getElementById('status');
-        const loginBox = document.getElementById('loginBox');
-        const verifiedBox = document.getElementById('verifiedBox');
-        
         // Get close buttons
         const studentCloseBtn = studentModal.querySelector('.close');
         const adminCloseBtn = adminModal.querySelector('.close');
@@ -1234,10 +1174,7 @@
 
         // Modal functions
         function openStudentModal() {
-            const firebaseModal = document.getElementById('firebaseAuthModal');
-            if (firebaseModal) {
-                firebaseModal.style.display = 'block';
-            }
+            studentModal.style.display = 'block';
         }
 
         function openAdminModal() {
@@ -1329,10 +1266,6 @@
             }
             if (event.target == adminModal) {
                 adminModal.style.display = 'none';
-            }
-            const firebaseModal = document.getElementById('firebaseAuthModal');
-            if (event.target == firebaseModal) {
-                firebaseModal.style.display = 'none';
             }
             const modal = document.getElementById('aboutModal');
             if (event.target == modal) {
@@ -1486,42 +1419,6 @@
           loadProfileData();
           const savedTheme = localStorage.getItem('theme') || 'light';
           setTheme(savedTheme);
-          
-          // Initialize Firebase auth state listener
-          if (typeof firebase !== 'undefined') {
-              firebase.auth().onAuthStateChanged(u=>{
-                if(u && u.emailVerified){
-                   const loginBoxElement = document.getElementById('loginBox');
-                   const verifiedBoxElement = document.getElementById('verifiedBox');
-                   const firebaseModalElement = document.getElementById('firebaseAuthModal');
-                   
-                   if (loginBoxElement) {
-                       loginBoxElement.querySelectorAll('input,button').forEach(el=>el.disabled=true);
-                   }
-                   if (verifiedBoxElement) {
-                       verifiedBoxElement.style.display = 'block';
-                   }
-                   
-                   // Store student data from Firebase authentication
-                   const userData = {
-                       name: u.email.split('@')[0], // Extract name from email
-                       email: u.email,
-                       phone: '', // Can be filled later in profile
-                       type: 'student'
-                   };
-                   localStorage.setItem('studentData', JSON.stringify(userData));
-                   
-                   // Close Firebase modal and show menu after a short delay
-                   setTimeout(() => {
-                       if (firebaseModalElement) {
-                           firebaseModalElement.style.display = 'none';
-                       }
-                       showMenuItems(userData.name);
-                   }, 2000);
-                }
-              });
-          }
-          
           // Check if user is already logged in when page loads
           const studentData = JSON.parse(localStorage.getItem('studentData'));
           const adminData = JSON.parse(localStorage.getItem('adminData'));
@@ -1710,97 +1607,6 @@
             if (e.target === addCoinsModal) addCoinsModal.style.display = 'none';
         });
         // --- End Add Coins Modal Logic ---
-
-        // Firebase Email Verification
-        function openFirebaseAuth(email) {
-            const emailInput = document.getElementById('email');
-            const firebaseModal = document.getElementById('firebaseAuthModal');
-            if (emailInput) {
-                emailInput.value = email;
-            }
-            if (firebaseModal) {
-                firebaseModal.style.display = 'block';
-            }
-        }
-        function closeFirebaseAuth() {
-            const firebaseModal = document.getElementById('firebaseAuthModal');
-            if (firebaseModal) {
-                firebaseModal.style.display = 'none';
-            }
-        }
-        function registerAndSend(){
-          console.log('registerAndSend function called');
-          
-          // Check if Firebase is loaded
-          if (typeof firebase === 'undefined') {
-              console.error('Firebase not loaded');
-              alert('Firebase not loaded. Please refresh the page.');
-              return;
-          }
-          
-          const emailInput = document.getElementById('email');
-          const passInput = document.getElementById('pass');
-          const statusElement = document.getElementById('status');
-          
-          console.log('Elements found:', {
-              emailInput: !!emailInput,
-              passInput: !!passInput, 
-              statusElement: !!statusElement,
-              firebase: !!firebase
-          });
-          
-          if (!emailInput || !passInput || !statusElement) {
-              console.error('Required elements not found');
-              alert('Required form elements not found');
-              return;
-          }
-          
-          const emailVal = emailInput.value.trim();
-          const passVal = passInput.value.trim();
-          
-          console.log('Form values:', { email: emailVal, passwordLength: passVal.length });
-          
-          if (!emailVal || !passVal) {
-              statusElement.innerText = "Please fill in both email and password.";
-              statusElement.style.color = "#e74c3c";
-              return;
-          }
-          
-          if(!emailVal.endsWith("@s.amity.edu")){
-             statusElement.innerText = "Only @s.amity.edu emails allowed";
-             statusElement.style.color = "#e74c3c";
-             return;
-          }
-          
-          statusElement.innerText = "Creating account...";
-          statusElement.style.color = "#f39c12";
-          
-          // Use firebase.auth() directly
-          firebase.auth().createUserWithEmailAndPassword(emailVal, passVal)
-              .then((userCredential) => {
-                  const user = userCredential.user;
-                  console.log('User created:', user.email);
-                  return user.sendEmailVerification({url: window.location.href});
-              })
-              .then(() => {
-                  statusElement.innerText = "Verification mail sent! Check inbox.";
-                  statusElement.style.color = "#28a745";
-                  console.log('Verification email sent');
-              })
-              .catch(error => {
-                  console.error('Firebase error:', error);
-                  statusElement.innerText = "Error: " + error.message;
-                  statusElement.style.color = "#e74c3c";
-              });
-        }
-        
-        // Make sure function is available globally
-        window.registerAndSend = registerAndSend;
-
-        function handleFirebaseAuth() {
-            // Keep for backward compatibility
-            registerAndSend();
-        }
     </script>
 </body>
 </html>
